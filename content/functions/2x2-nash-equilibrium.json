@@ -1,0 +1,14 @@
+{
+    "functions": [
+        ""
+    ],
+    "defaults": [
+        
+    ],
+    "description": "Calculate the Nash equilibrium",
+    "tags": [
+        "Coding",
+        "AI",
+        "Linear Algebra"
+    ]
+}

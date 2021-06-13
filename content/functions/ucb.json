@@ -1,0 +1,14 @@
+{
+    "functions": [
+        "C2/D2+MATH.sqrt(2*MATH.ln(B2) / D2)"
+    ],
+    "defaults": [
+        ["B2", "1"]
+    ],
+    "description": "Calculate the Monte Carlo path",
+    "tagas": [
+        "Coding",
+        "AI",
+        "Monte Carlo"
+    ]
+}
