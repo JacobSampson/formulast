@@ -22,7 +22,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "node_modules/mathjs/dist/math.min.js"
   ],
   "exclude": [
     "node_modules"

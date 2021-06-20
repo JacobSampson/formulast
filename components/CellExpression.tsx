@@ -1,20 +1,21 @@
+import { MathExpression } from 'mathjs';
 import styled from 'styled-components';
+import { evaluate } from '../lib/core';
 
 export type Direction = 'none' | 'left' | 'right' | 'top' | 'bottom';
 export type Variant = 'primary' | 'secondary';
 
-export interface CellLabelProps {
+export interface CellExpressionProps {
     direction?: Direction;
     variant?: Variant;
-
-    label: any;
+    expression: string | number;
 }
 
-const Container = styled.div<Partial<CellLabelProps>>`
+const Container = styled.div<Partial<CellExpressionProps>>`
     --local-gap: var(--gap, 0.5em);
 
-    height: calc(100% - var(--local-gap));
-    width: calc(100% - var(--local-gap));
+    /* height: calc(100% - var(--local-gap));
+    width: calc(100% - var(--local-gap)); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,16 +58,18 @@ const Label = styled.p`
   margin: 0;
 `;
 
-export const CellLabel: React.FC<CellLabelProps> = ({
+export const CellExpression: React.FC<CellExpressionProps> = ({
     direction = 'none',
     variant = 'secondary',
-    label,
+    expression,
     ...props
 }) => {
+    const computedValue = evaluate(expression as any as MathExpression);
+
     return (
         <Container
             {...{ variant, direction, ...props }}>
-            <Label>{label}</Label>
+            <Label>{computedValue}</Label>
         </Container>
     )
 };

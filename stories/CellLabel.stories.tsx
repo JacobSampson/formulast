@@ -13,7 +13,7 @@ const Template: Story<CellLabelProps> = (args) => {
       <CellLabel label={'Label'} {...args} />
     </div>
   );
-}
+};
 
 export const Default = Template.bind({});
 
@@ -39,5 +39,16 @@ Bottom.args = {
 
 export const Right = Template.bind({});
 Right.args = {
+  direction: 'right'
+};
+
+export const Styled = (args) => {
+  return (
+    <div style={{ width: '15em', height: '4em', border: '2px solid lightgray' }}>
+      <CellLabel label={'Label'} {...args} style={{ '--gap': '1em' }} />
+    </div>
+  );
+}
+Styled.args = {
   direction: 'right'
 };

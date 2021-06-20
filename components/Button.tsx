@@ -4,14 +4,17 @@ import { Size, defaultTransition } from '../styles/constants';
 
 export type Variant = 'primary' | 'secondary';
 
-interface ButtonStyles {
+export interface ButtonProps {
   variant?: Variant;
   size?: Size;
   active?: boolean;
   square?: boolean;
-}
 
-const StyledButton = styled.button<ButtonStyles>`
+  label: string;
+  onClick?: () => void;
+};
+
+const Container = styled.button<Partial<ButtonProps>>`
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -28,10 +31,10 @@ const StyledButton = styled.button<ButtonStyles>`
   padding: 0.5em 1em;
   gap: 0.5em;
 
-  box-shadow: 0.33em 0.33dm 0.16em ${({ theme }) => theme.shadow.light};
+  box-shadow: 0.25em 0.25em 0.125em ${({ theme }) => theme.shadow.light};
   :hover {
-    transform: translateY(0.16em);
-    box-shadow: 0.16em 0.16em 0px ${({ theme }) => theme.shadow.light};
+    transform: translateY(0.125em);
+    box-shadow: 0.125em 0.125em 0px ${({ theme }) => theme.shadow.light};
   }
 
   // Color
@@ -62,11 +65,6 @@ const Label = styled.p`
   margin: 0;
 `;
 
-export interface ButtonProps extends ButtonStyles {
-  label: string;
-  onClick?: () => void;
-};
-
 export const Button: React.FC<ButtonProps> = ({
   variant = 'secondary',
   size = 'medium',
@@ -76,8 +74,8 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    <StyledButton type='button' {...{ variant, size, active, square, ...props }}>
+    <Container type='button' {...{ variant, size, active, square, ...props }}>
       <Label>{label}</Label>
-    </StyledButton>
+    </Container>
   );
 };
