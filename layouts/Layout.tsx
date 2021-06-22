@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const name = 'Jacob Sampson'
-export const siteTitle = 'formulaist'
+export const siteTitle = 'formulast'
 
 export default function Layout({
   children,

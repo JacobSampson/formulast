@@ -75,7 +75,7 @@ export const Grid: React.FC<GridProps> = ({
     ...props
 }) => {
     if (!cells || !cells.length || !cells[0].length) {
-        return;
+        return (<></>);
     }
 
     const dispatch = useDispatch();

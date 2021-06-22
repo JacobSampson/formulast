@@ -66,7 +66,11 @@ export const evaluateExpressions = (cells: CellModel[][]): Object => {
         if (currIndex >= cellInputs.length) {
             // Throw error if no update on evaluation pass through
             if (untouched) {
-                throw new Error('Incorrect function sequence');
+                // throw new Error('Incorrect function sequence');
+                return {
+                    ...scope,
+                    [(cell.tag)]: 'NAN'
+                };
             }
 
             currIndex = 0;

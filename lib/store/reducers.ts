@@ -3,7 +3,7 @@ import { evaluateExpressions } from "../core";
 import { alphanumericToIndicies } from "../util";
 import { GridState, GridAction, UPDATE_CELL_VALUE, LOAD_CELL_VALUES, UPDATE_CELL_TYPE, LOAD_FUNCTION } from "./actions";
 
-const initialState: GridState  = {
+const emptyState: GridState  = {
     cells: [[]],
     scope: {},
     meta: {
@@ -13,10 +13,9 @@ const initialState: GridState  = {
 };
 
 const reducer = (
-    state: GridState = initialState,
+    state: GridState = emptyState,
     action: GridAction
 ): GridState => {
-    
     switch(action.type) {
         case LOAD_FUNCTION: {
             const { cells, meta } = action.value;

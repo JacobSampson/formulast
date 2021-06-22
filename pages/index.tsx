@@ -1,13 +1,14 @@
 import Head from 'next/head';
+import { Page } from '../layouts/Page';
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Formulaist</title>
+        <title>Formulast</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Formulaist</h1>
+      <Page onLogin={console.log} onLogout={console.log} onCreateAccount={console.log} />
     </>
   )
 }

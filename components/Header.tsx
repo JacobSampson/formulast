@@ -25,7 +25,7 @@ const Title = styled.h1`
   ::after {
     content: '';
     width: 3em;
-    height: 1em;
+    height: 0.75em;
     display: block;
     position: absolute;
     bottom: 0.25em;
@@ -41,7 +41,12 @@ const Bar = styled.nav`
   align-items: center;
   justify-content: space-between;
   border-bottom: 0.5em solid ${({ theme }) => theme.palette.primary.main};
-  padding: 0 1em;
+  padding: 0 3em;
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const Buttons = styled.div`
@@ -52,11 +57,13 @@ const Buttons = styled.div`
   & > *:not(:last-of-type) {
       margin-right: 1em;
   }
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
+    display: none;
+  }
 `;
 
 const Container = styled.header`
-  @media screen and (max-width: ${({ theme }) => theme.screen.small}) {
-  }
 `;
 
 export const Header: React.FC<HeaderProps> = ({

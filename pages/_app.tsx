@@ -8,7 +8,6 @@ import { applyMiddleware, createStore, Store } from 'redux';
 import reducer from '../lib/store/reducers';
 import thunk from 'redux-thunk';
 import { DispatchType, GridAction, GridState } from '../lib/store';
-import { Grid } from '../components/Grid';
 
 const GlobalStyle = createGlobalStyle`${globalStyle}`;
 const store: Store<GridState, GridAction> & {
@@ -21,11 +20,6 @@ function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <GlobalStyle />
-      <Button
-        variant={'primary'}
-        label={`Set ${theme === lightTheme ? 'light' : 'dark'} Mode`}
-        onClick={() => theme === lightTheme ? darkTheme : lightTheme}
-      />
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
       </ThemeProvider>

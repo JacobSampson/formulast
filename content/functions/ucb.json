@@ -1,14 +1,17 @@
 {
-    "functions": [
-        "C2/D2+MATH.sqrt(2*MATH.ln(B2) / D2)"
+    "cells": [
+        [{ "type": "label", "props": { "label": "Parent", "direction": "bottom" }}, { "type": "label", "props": { "label": "Wins", "direction": "bottom" }}, { "type": "label", "props": { "label": "Me", "direction": "bottom" }}],
+        [{ "type": "input", "props": { "value": "2" }}, { "type": "input", "props": { "value": "0" }}, { "type": "input", "props": { "value": "1" }}],
+        [null,null,null],
+        [{ "type": "label", "props": { "label": "UCB", "direction": "right", "variant": "primary" }}, { "type": "input", "props": { "value": "=B2/C2+sqrt(2*log(A2,e)/C2)", "disabled": true }},null]
     ],
-    "defaults": [
-        ["B2", "1"]
-    ],
-    "description": "Calculate the Monte Carlo path",
-    "tagas": [
-        "Coding",
-        "AI",
-        "Monte Carlo"
-    ]
+    "meta": {
+        "title": "UCB",
+        "description": "Calculate the UCB value",
+        "tags": [
+            { "label": "Coding" },
+            { "label": "AI" },
+            { "label": "Linear Algebra" }
+        ]
+    }
 }

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Page, PageProps } from '../components/Page';
+import { Page, PageProps } from '../layouts/Page';
 import { CellModel } from '../lib/models';
 import { loadFunction } from '../lib/store';
 import { testCells, testCells__UCB } from './data/test___cells';
