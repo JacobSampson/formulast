@@ -1,3 +1,3 @@
-# ![](public/images/logo.svg) ![formulast](https://formulast.vercel.app/)
+# ![](public/images/logo.svg) formulast
 
 Create and share clean, read-to-use function snippets
