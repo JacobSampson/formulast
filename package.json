@@ -10,7 +10,6 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@types/mathjs": "^9.4.2",
     "@types/react-redux": "^7.1.16",
     "date-fns": "^2.11.1",
     "gray-matter": "^4.0.2",
