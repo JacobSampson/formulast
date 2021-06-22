@@ -3,7 +3,7 @@ import { Story } from '@storybook/react';
 import { CellInput, CellInputProps } from '../components/CellInput';
 
 export default {
-    title: 'CellInput',
+    title: 'Atoms/CellInput',
     component: CellInput,
     argTypes: {
         backgroundColor: { control: 'color' }
@@ -36,4 +36,11 @@ export const Function = Template.bind({});
 Function.args = {
     type: 'function',
     value: '=2+6'
+}
+
+export const Locked = Template.bind({});
+Locked.args = {
+    type: 'function',
+    value: '=2+6',
+    disabled: true
 }

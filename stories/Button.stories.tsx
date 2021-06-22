@@ -4,7 +4,7 @@ import { Button, ButtonProps } from '../components/Button';
 import { HiPencilAlt, HiOutlineStar } from 'react-icons/hi';
 
 export default {
-  title: 'Button',
+  title: 'Atoms/Button',
   component: Button
 } as Meta;
 
@@ -32,7 +32,7 @@ Inactive.args = {
 export const Icon = Template.bind({});
 Icon.args = {
   variant: 'primary',
-  label: (<><HiPencilAlt /> 16.k</>)
+  label: (<HiPencilAlt />)
 };
 
 export const Square = Template.bind({});

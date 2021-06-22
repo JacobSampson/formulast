@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react';
 import { CellLabel, CellLabelProps } from '../components/CellLabel';
 
 export default {
-  title: 'CellLabel',
+  title: 'Atoms/CellLabel',
   component: CellLabel
 } as Meta;
 

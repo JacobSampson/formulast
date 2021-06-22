@@ -26,4 +26,16 @@ export const globalStyle = `
     max-width: 100%;
     display: block;
   }
+
+  @keyframes popin {
+    0% {
+      transform: scale(100%);
+      opacity: 0%;
+    }
+    50% {
+      transform: scale(100%);
+      opacity: 100%;
+    }
+    100% {}
+  }
 `;

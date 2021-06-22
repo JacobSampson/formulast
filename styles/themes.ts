@@ -14,6 +14,12 @@ export type Theme = {
 		large: number | string;
 		xlarge: number | string;
 	};
+	screen: {
+		xsmall: string;
+		small: string;
+		medium: string;
+		large: string;
+	};
 	palette: {
 		common: {
 		  black: string;
@@ -35,6 +41,12 @@ const baseTheme = {
 		medium: `${fontSizes.medium}px`,
 		large: `${fontSizes.large}px`,
 		xlarge: `${fontSizes.xlarge}px`
+	},
+	screen: {
+		xsmall: '750px',
+		small: '900px',
+		medium: '1150px',
+		large: '1500px'
 	},
 	shadow: {
 		light: '#EAE8EC'

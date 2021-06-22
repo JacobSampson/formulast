@@ -20,7 +20,7 @@ const Container = styled.div<Partial<CellLabelProps>>`
     justify-content: center;
     margin: calc(var(--local-gap) / 2);
     position: relative;
-    z-index: -5;
+    z-index: 5;
 
     // Color
 
@@ -42,7 +42,7 @@ const Container = styled.div<Partial<CellLabelProps>>`
 
         return `
             margin-${direction}: calc(var(--local-gap) * -1);
-            ${dimension}: calc(100% + calc(var(--local-gap) / 2));
+            ${dimension}: calc(100% + calc(var(--local-gap) / 2) - 4px);
             
             > * {
                 margin-${direction}: var(--local-gap);

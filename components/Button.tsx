@@ -9,8 +9,7 @@ export interface ButtonProps {
   size?: Size;
   active?: boolean;
   square?: boolean;
-
-  label: string;
+  label?: string;
   onClick?: () => void;
 };
 
@@ -30,7 +29,6 @@ const Container = styled.button<Partial<ButtonProps>>`
   border-radius: ${({ square }) => square ? '0px' : '2em'};
   padding: 0.5em 1em;
   gap: 0.5em;
-
   box-shadow: 0.25em 0.25em 0.125em ${({ theme }) => theme.shadow.light};
   :hover {
     transform: translateY(0.125em);
@@ -71,11 +69,12 @@ export const Button: React.FC<ButtonProps> = ({
   active = true,
   square = false,
   label,
+  children,
   ...props
 }) => {
   return (
     <Container type='button' {...{ variant, size, active, square, ...props }}>
-      <Label>{label}</Label>
+      <Label>{children}{label}</Label>
     </Container>
   );
 };

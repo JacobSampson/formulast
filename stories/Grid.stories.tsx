@@ -4,7 +4,7 @@ import { CellModel, CellType } from '../lib/models/cell';
 
 
 export default {
-    title: 'Grid',
+    title: 'Molecules/Grid',
     component: Grid
 }
 
@@ -22,5 +22,5 @@ const Template: Story<GridProps> = (args) => {
     );
   };
 
-export const Primary = Template.bind({});
-Primary.args = {}
+export const Filled = Template.bind({});
+Filled.args = {}

@@ -8,6 +8,7 @@ import { applyMiddleware, createStore, Store } from 'redux';
 import reducer from '../lib/store/reducers';
 import thunk from 'redux-thunk';
 import { DispatchType, GridAction, GridState } from '../lib/store';
+import { Grid } from '../components/Grid';
 
 const GlobalStyle = createGlobalStyle`${globalStyle}`;
 const store: Store<GridState, GridAction> & {

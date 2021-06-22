@@ -1,12 +1,8 @@
 import * as math from 'mathjs';
-import { CellModel } from "../models/cell";
-
-const STACK_LIMIT = 50;
-
-interface Tag {
-    tag: string;
-    ref: CellModel;
-}
+import { CellInputProps } from '../../components/CellInput';
+import { CellModel, CellType } from '../models/cell';
+import { indicesToAlphanumeric } from '../util';
+import { isNumber } from '../util/numbers';
 
 export const evaluate = (expression: string, scope = {}): number | string => {
     if ((!expression) || (expression.length === 0)) {
@@ -24,20 +20,58 @@ export const evaluate = (expression: string, scope = {}): number | string => {
     }
 };
 
-/**
- * @src https://stackoverflow.com/questions/8240637/convert-numbers-to-letters-beyond-the-26-character-alphabet
- * @param num 
- * @returns 
- */
-function numberToLetters(num) {
-    let letters = ''
-    while (num >= 0) {
-        letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[num % 26] + letters
-        num = Math.floor(num / 26) - 1
+export const evaluateExpressions = (cells: CellModel[][]): Object => {
+    if (!cells || !cells.length || !cells[0].length) {
+        return;
     }
-    return letters
-}
-export const indicesToAlphanumeric = (rowIndex, colIndex) => {
-    const letter = numberToLetters(rowIndex);
-    return `${letter}${colIndex + 1}`;
-}
+    
+    // Filter out inputs
+    const cellInputs = [];
+    for (let rowIndex = 0; rowIndex < cells.length; rowIndex++) {
+        for (let colIndex = 0; colIndex < cells[rowIndex].length; colIndex++) {
+            const cell = cells[rowIndex][colIndex];
+            if (cell && cell.type === CellType.INPUT) {
+                cell.tag = indicesToAlphanumeric(rowIndex, colIndex);
+                cellInputs.push(cell);
+            }
+        }
+    }
+
+    // Run evaluations
+    const scope = {};
+    let currIndex = 0;
+    let untouched = false;
+    while (cellInputs.length) {
+        if (currIndex === 0) {
+            untouched = true;
+        }
+
+        const cell = cellInputs[currIndex] as CellModel;
+        const cellProps = cell.props as CellInputProps;
+
+        const value = evaluate(cellProps.value, scope);
+        if (isNumber(value.toString())) {
+            // Update value for cell in scope
+            scope[cell.tag] = value;
+    
+            // Remove successful calculation
+            cellInputs.splice(currIndex, 1);
+            untouched = false;
+            currIndex = 0;
+            continue;
+        } else {
+            currIndex++;
+        }
+
+        if (currIndex >= cellInputs.length) {
+            // Throw error if no update on evaluation pass through
+            if (untouched) {
+                throw new Error('Incorrect function sequence');
+            }
+
+            currIndex = 0;
+        }
+    }
+
+    return scope;
+};

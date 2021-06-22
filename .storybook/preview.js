@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { globalStyle } from '../styles/global';
 import { lightTheme } from '../styles/themes';
-import { GridState, GridAction, DispatchType } from '../lib/store';
 import reducer from '../lib/store/reducers';
 
 export const parameters = {
@@ -13,7 +12,6 @@ export const parameters = {
 }
 
 const GlobalStyle = createGlobalStyle`${globalStyle}`;
-
 const store = createStore(reducer, applyMiddleware(thunk));
 
 export const decorators = [

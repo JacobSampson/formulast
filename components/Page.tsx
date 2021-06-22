@@ -1,5 +1,9 @@
 import React from 'react';
+import { HiStar } from 'react-icons/hi';
+import styled from 'styled-components';
+import { Aside } from './Aside';
 import { Header } from './Header';
+import { Sheet } from './Sheet';
 
 export interface PageProps {
   user?: {};
@@ -8,58 +12,50 @@ export interface PageProps {
   onCreateAccount: () => void;
 }
 
-export const Page: React.FC<PageProps> = ({ user, onLogin, onLogout, onCreateAccount }) => (
-  <article>
-    <Header user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />
+const Body = styled.div`
+  max-width: 100em;
+  width: 80%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 15em;
+  grid-gap: 3em;
 
-    <section>
-      <h2>Pages in Storybook</h2>
-      <p>
-        We recommend building UIs with a{' '}
-        <a href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
-          <strong>component-driven</strong>
-        </a>{' '}
-        process starting with atomic components and ending with pages.
-      </p>
-      <p>
-        Render pages with mock data. This makes it easy to build and review page states without
-        needing to navigate to them in your app. Here are some handy patterns for managing page data
-        in Storybook:
-      </p>
-      <ul>
-        <li>
-          Use a higher-level connected component. Storybook helps you compose such data from the
-          "args" of child component stories
-        </li>
-        <li>
-          Assemble data in the page component from your services. You can mock these services out
-          using Storybook.
-        </li>
-      </ul>
-      <p>
-        Get a guided tutorial on component-driven development at{' '}
-        <a href="https://www.learnstorybook.com" target="_blank" rel="noopener noreferrer">
-          Learn Storybook
-        </a>
-        . Read more in the{' '}
-        <a href="https://storybook.js.org/docs" target="_blank" rel="noopener noreferrer">
-          docs
-        </a>
-        .
-      </p>
-      <div className="tip-wrapper">
-        <span className="tip">Tip</span> Adjust the width of the canvas with the{' '}
-        <svg width="10" height="10" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-          <g fill="none" fillRule="evenodd">
-            <path
-              d="M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0 01-.5-.4V5.7c0-.3.2-.5.5-.5zm0-2.1h6.9c.3 0 .5.2.5.4v7a.5.5 0 01-1 0V4H1.5a.5.5 0 010-1zm0-2.1h9c.3 0 .5.2.5.4v9.1a.5.5 0 01-1 0V2H1.5a.5.5 0 010-1zm4.3 5.2H2V10h3.8V6.2z"
-              id="a"
-              fill="#999"
-            />
-          </g>
-        </svg>
-        Viewports addon in the toolbar
-      </div>
-    </section>
-  </article>
+  @media screen and (max-width: ${({ theme }) => theme.screen.medium}) {
+    grid-template-columns: 1fr;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
+    width: 100%;
+  }
+`;
+
+const Asides = styled.aside`
+  display: flex;
+  grid-gap: 1em;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const Container = styled.div`
+
+`;
+
+export const Page: React.FC<PageProps> = ({
+  user,
+  onLogin,
+  onLogout,
+  onCreateAccount
+}) => (
+  <Container>
+    <Header user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />
+    <Body>
+      <Sheet />
+      <Asides>
+        <Aside title='How to Use' description='Input the values into the top and the output will display at the bottom'/>
+        <Aside title='Floating Number Converter' description='Input the values into the top and the output will display at the bottom'>
+          <HiStar />
+        </Aside>
+      </Asides>
+    </Body>
+  </Container>
 );

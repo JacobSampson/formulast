@@ -13,8 +13,8 @@ export const fontSizes = {
     xsmall: 8,
     small: 12,
     medium: 16,
-    large: 18,
-    xlarge: 20
+    large: 24,
+    xlarge: 36
 };
 
 export const borderSize = 4;

@@ -4,7 +4,7 @@ import { Meta, Story } from '@storybook/react';
 import Layout from '../layouts/Layout';
 
 export default {
-  title: 'Layout/Layout',
+  title: 'Layouts/Layout',
   component: Layout,
 } as Meta;
 

@@ -1,6 +1,9 @@
 import {  useState } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { evaluate } from '../lib/core';
+import { GridState, updateCellType, UPDATE_CELL_TYPE } from '../lib/store';
+import { isNumber } from '../lib/util/numbers';
 
 export type Direction = 'none' | 'left' | 'right' | 'top' | 'bottom';
 export type InputType = 'text' | 'number' | 'constant' | 'function';
@@ -8,10 +11,12 @@ export type InputType = 'text' | 'number' | 'constant' | 'function';
 export interface CellInputProps {
     direction?: Direction;
     value: string;
-    tag: string;
+    tag?: string;
     type?: InputType;
+    live?: boolean;
     clearable?: boolean;
     placeHolder?: string;
+    disabled?: boolean;
     onChange: (newValue: string) => void;
 };
 
@@ -24,12 +29,12 @@ const Container = styled.section<React.FC<CellInputProps>>`
     align-items: center;
     justify-content: center;
     margin: calc(var(--local-gap) / 2);
-    box-shadow: 0px 0px 3px lightgray;
-    z-index: 0;
+    z-index: 2;
     position: relative;
 
     &:hover, &:focus-within {
-        z-index: 5;
+        z-index: 10;
+        cursor: text;
     }
 
     &:hover > .hideaway, &:focus-within > .hideaway {
@@ -51,9 +56,16 @@ const Input = styled.input<Partial<CellInputProps>>`
     padding: 0;
     margin: 0;
     border: 2px solid lightgray;
+    border-radius: 0px;
     text-align: center;
 
-    &:focus-within {
+    ${({ disabled }) => disabled
+    ? `
+    background-color: white;
+    filter: opacity(0.75);
+    ` : ''}
+
+    &:focus-within > * {
         border: 4px solid black;
     }
 `;
@@ -85,6 +97,7 @@ const Value = styled.div`
     transition: 0.15s ease-out;
     z-index: 5;
     white-space: nowrap;
+    animation: 0.35s ease-out 0s 1 popin;
 
     > * {
         overflow: hidden;
@@ -98,35 +111,60 @@ export const CellInput: React.FC<CellInputProps> = ({
     type = 'text',
     placeHolder = '',
     clearable = false,
+    disabled = false,
     value = '',
+    live = true,
     tag,
     onChange,
     ...props
 }) => {
     const [rawValue, setRawValue] = useState(value);
+    const scope: Object = useSelector(
+        (state: GridState) => state.scope,
+        shallowEqual
+    );
+
+    const dispatch = useDispatch();
+    const updateCell = (type: InputType) => dispatch(updateCellType(tag, type));
 
     const updateRawValue = value => {
-        if (type === 'number' && !(!isNaN(parseFloat(value)) && isFinite(value))) {
-            setRawValue('');
-            return;
+        let newValue = value;
+        // if (type !== 'function' && value.toString().charAt(0) === '=') {
+        //     setRawValue('=');
+        //     updateCell('function');
+        //     return;
+        // } else
+        if (type === 'number' && !(isNumber(value))) {
+            newValue = '';
         }
-
-        setRawValue(value);
+        
+        setRawValue(newValue);
+        if (type === 'number' || live) {
+            onChange(newValue);
+        }
     };
 
-    const valueText = evaluate(rawValue).toString();
+    const isFunction = (value) => value.toString().charAt(0) === '=';
+
+    // const computedValue: string = useSelector(
+    //     (state: GridState) => state.scope[tag],
+    //     shallowEqual
+    // );
+    // const valueText = computedValue == null ? evaluate(rawValue).toString() : computedValue;
+    const valueText = evaluate(rawValue, scope).toString();
 
     return (
         <Container>
             <Input
                 {...{ direction, ...props }}
+                disabled={disabled}
                 type={type}
                 value={rawValue}
                 placeholder={placeHolder}
                 onBlur={() => onChange(rawValue)}
                 onChange={event => updateRawValue(event.target.value)}
             />
-            {(type === 'function') &&
+            {((type === 'function') || (isFunction(rawValue))) &&
                 <Value className='hideaway' title={valueText}>
                     <p>{valueText}</p>
                 </Value>
