@@ -3,19 +3,15 @@ import path from 'path'
 
 const functionsDirectory = path.join(process.cwd(), 'content/functions')
 
-export function getSortedFunctionsData() {
-  // Get file names under /content/functions
+export function getSortedFormulas() {
   const fileNames = fs.readdirSync(functionsDirectory)
   const allFunctionsData = fileNames.map(fileName => {
-    // Remove ".json" from file name to get id
     const id = fileName.replace(/\.json$/, '')
 
-    // Read markdown file as string
     const fullPath = path.join(functionsDirectory, fileName)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const functionData = JSON.parse(fileContents);
     
-    // Combine the data with the id
     return {
       id,
       ...functionData
@@ -25,7 +21,7 @@ export function getSortedFunctionsData() {
   return allFunctionsData;
 }
 
-export function getAllFunctionIds() {
+export function getAllFormulaIds() {
   const fileNames = fs.readdirSync(functionsDirectory)
   return fileNames.map(fileName => {
     return {
@@ -36,7 +32,7 @@ export function getAllFunctionIds() {
   });
 }
 
-export async function getFunctionData(id: string) {
+export async function getFormulaData(id: string) {
   const fullPath = path.join(functionsDirectory, `${id}.json`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const functionData = JSON.parse(fileContents);

@@ -1,0 +1,15 @@
+{
+    "cells": [
+        [{ "type": "label", "props": { "label": "Current Assets ($)", "direction": "bottom" }}, { "type": "label", "props": { "label": "Current Liabilities ($)", "direction": "bottom" }}],
+        [{ "type": "input", "props": { "value": "100" }}, { "type": "input", "props": { "value": "100" }}],
+        [null,null],
+        [{ "type": "label", "props": { "label": "Current Ratio (%)", "direction": "right", "variant": "primary" }}, { "type": "input", "props": { "value": "=A2/B2*100", "disabled": true }}]
+    ],
+    "meta": {
+        "title": "Current Ratio",
+        "description": "Calculate a company's current ratio",
+        "tags": [
+            { "label": "Accounting" }
+        ]
+    }
+}

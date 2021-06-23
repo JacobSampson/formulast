@@ -1,20 +1,64 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
+import Head from 'next/head';
+import React from 'react';
+import { HiStar } from 'react-icons/hi';
+import styled from 'styled-components';
+import { Aside } from '../components/Aside';
+import { Header } from '../components/Header';
+
+export interface LayoutProps {
+  user?: {};
+  asides?: any;
+  onLogin: () => void;
+  onLogout: () => void;
+  onCreateAccount: () => void;
+}
+
+const Body = styled.div`
+  max-width: 100em;
+  width: 80%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 20em;
+  grid-gap: 3em;
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.medium}) {
+    grid-template-columns: 1fr;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
+    width: 100%;
+  }
+`;
+
+const StyledHeader = styled(Header)`
+`;
+
+const Asides = styled.aside`
+  display: flex;
+  grid-gap: 1em;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const Container = styled.body`
+
+`;
 
 const name = 'Jacob Sampson'
 export const siteTitle = 'formulast'
 
-export default function Layout({
+export const Layout: React.FC<LayoutProps> = ({
+  user,
+  asides,
   children,
-  home
-}: {
-  children: React.ReactNode
-  home?: boolean
-}) {
+  onLogin,
+  onLogout,
+  onCreateAccount
+}) => {  
   return (
-    <div>
+    <Container>
       <Head>
+        <title>Formulast</title>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
@@ -29,49 +73,11 @@ export default function Layout({
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <header>
-        {home ? (
-          <>
-            <Image
-              priority
-              src="/images/profile.jpg"
-            
-              height={144}
-              width={144}
-              alt={name}
-            />
-            <h1>{name}</h1>
-          </>
-        ) : (
-          <>
-            <Link href="/">
-              <a>
-                <Image
-                  priority
-                  src="/images/profile.jpg"
-                
-                  height={108}
-                  width={108}
-                  alt={name}
-                />
-              </a>
-            </Link>
-            <h2>
-              <Link href="/">
-                <a>{name}</a>
-              </Link>
-            </h2>
-          </>
-        )}
-      </header>
-      <main>{children}</main>
-      {!home && (
-        <div>
-          <Link href="/">
-            <a>← Back to home</a>
-          </Link>
-        </div>
-      )}
-    </div>
-  )
-}
+      <StyledHeader user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />
+      <Body>
+        {children}
+        <Asides>{asides}</Asides>
+      </Body>
+    </Container>
+  );
+};

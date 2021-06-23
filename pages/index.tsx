@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Page } from '../layouts/Page';
+import { Layout } from '../layouts/Layout';
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
         <title>Formulast</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Page onLogin={console.log} onLogout={console.log} onCreateAccount={console.log} />
+      <Layout onLogin={console.log} onLogout={console.log} onCreateAccount={console.log} />
     </>
   )
 }

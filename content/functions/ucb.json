@@ -1,17 +1,16 @@
 {
     "cells": [
-        [{ "type": "label", "props": { "label": "Parent", "direction": "bottom" }}, { "type": "label", "props": { "label": "Wins", "direction": "bottom" }}, { "type": "label", "props": { "label": "Me", "direction": "bottom" }}],
+        [{ "type": "label", "props": { "label": "Parent(n) Plays", "direction": "bottom" }}, { "type": "label", "props": { "label": "Wins(n)", "direction": "bottom" }}, { "type": "label", "props": { "label": "Plays(n)", "direction": "bottom" }}],
         [{ "type": "input", "props": { "value": "2" }}, { "type": "input", "props": { "value": "0" }}, { "type": "input", "props": { "value": "1" }}],
         [null,null,null],
         [{ "type": "label", "props": { "label": "UCB", "direction": "right", "variant": "primary" }}, { "type": "input", "props": { "value": "=B2/C2+sqrt(2*log(A2,e)/C2)", "disabled": true }},null]
     ],
     "meta": {
-        "title": "UCB",
-        "description": "Calculate the UCB value",
+        "title": "Upper Confidence Bound (UCB)",
+        "description": "Upper-Confidence Bound applied to trees where UCB is calculated using the plays of the parent (Parent(n) Plays), the plays of the child node (Plays(n)) and the wins of the child node (Wins(n))",
         "tags": [
             { "label": "Coding" },
-            { "label": "AI" },
-            { "label": "Linear Algebra" }
+            { "label": "AI" }
         ]
     }
 }

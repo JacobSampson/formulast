@@ -17,6 +17,7 @@ const Container = styled.header`
 
     @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
         margin: 0 2em;
+        width: calc(100% - 2em);
     }
 `;
 
@@ -33,7 +34,6 @@ const Author = styled.div`
 `;
 
 const Elements = styled.div`
-    padding: 0;
     margin: 0;
     display: flex;
     flex-direction: row;
@@ -42,6 +42,8 @@ const Elements = styled.div`
     width: 100%;
     position: relative;
     min-height: 3em;
+    border-bottom: 0.1em solid lightgray;
+    padding: 1em 0;
 
     @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
         display: grid;
@@ -89,12 +91,12 @@ export const Description: React.FC<DescriptionProps> = ({
             {author && <Author>Created by {author.username}</Author>}
             <Elements>
                 <Tags>
-                    {tags && tags.map(({ label }) => <Tag>{label}</Tag>)}
+                    {tags && tags.map(({ label }) => <Tag key={label}>{label}</Tag>)}
                 </Tags>
-                <Buttons>
+                {/* <Buttons>
                     <Button size='medium'><HiPencilAlt /></Button>
                     <Button size='medium' variant='primary'><HiOutlineStar /> 67</Button>
-                </Buttons>
+                </Buttons> */}
             </Elements>
             <DescriptionBlock>{description}</DescriptionBlock>
         </Container>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from './Button';
 
+const CHAR_LIMIT = 100;
+
 export interface AsideProps {
     title: string;
     description: string;
@@ -27,12 +29,12 @@ const Title = styled.h3`
 `;
 
 const Description = styled.p<{ expanded: boolean }>`
-    ${({ expanded }) => (!expanded) && `
-        max-height: 2em;
-        white-space: nowrap;
+    /* ${({ expanded }) => (!expanded) && `
+        max-height: 3em;
         overflow: hidden;
-        text-overflow: ellipsis;
-    `}
+        // white-space: nowrap;
+        // text-overflow: ellipsis;
+    `} */
     padding: 0;
     margin: 1rem;
 `;
@@ -66,7 +68,7 @@ export const Aside: React.FC<AsideProps> = ({
         <Description expanded={expanded}>
             {description}
         </Description>
-        {!expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Read more</Expander>}
-        {expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Close</Expander>}
+        {/* {!expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Read more</Expander>}
+        {expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Close</Expander>} */}
     </Container>
 };

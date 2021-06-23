@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
-import Layout from '../layouts/Layout';
+import Layout from '../layouts/Layout2';
 
 export default {
   title: 'Layouts/Layout',

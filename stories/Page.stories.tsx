@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Page, PageProps } from '../layouts/Page';
+import { Layout, LayoutProps } from '../layouts/Layout';
 import { CellModel } from '../lib/models';
 import { loadFunction } from '../lib/store';
 import { testCells, testCells__UCB } from './data/test___cells';
@@ -11,10 +11,10 @@ import * as HeaderStories from './Header.stories';
 
 export default {
   title: 'Layouts/Page',
-  component: Page,
+  component: Layout,
 } as Meta;
 
-const Template: Story<PageProps> = (args) => {
+const Template: Story<LayoutProps> = (args) => {
   useDispatch()(
     loadFunction(
       testCells__UCB,
@@ -34,7 +34,7 @@ const Template: Story<PageProps> = (args) => {
   );
 
   return (
-    <Page {...args} onCreateAccount={console.log} onLogin={console.log} onLogout={console.log} />
+    <Layout {...args} onCreateAccount={console.log} onLogin={console.log} onLogout={console.log} />
   );
 };
 

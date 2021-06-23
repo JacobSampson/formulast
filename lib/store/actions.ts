@@ -1,11 +1,11 @@
 import { InputType } from "../../components/CellInput";
 import { CellModel } from "../models/cell";
-import { FunctionMeta } from "../models/function";
+import { FormulaMeta } from "../models/formula";
 
 export type GridState = {
     cells: CellModel[][];
     scope: Object;
-    meta: FunctionMeta;
+    meta: FormulaMeta;
 };
 
 export type GridAction = {
@@ -47,7 +47,7 @@ export const loadCellValues = (cells: CellModel[][]) => {
     });
 };
 
-export const loadFunction = (cells: CellModel[][], meta: FunctionMeta) => {
+export const loadFunction = (cells: CellModel[][], meta: FormulaMeta) => {
     return (dispatch: DispatchType) => dispatch({
         type: LOAD_FUNCTION,
         value: {

@@ -1,10 +1,10 @@
 import { DescriptionProps } from "../../components/Description";
 import { CellModel } from "./cell";
 
-export type FunctionMeta = DescriptionProps;
+export type FormulaMeta = DescriptionProps;
 
-export interface IFunction {
-    meta: FunctionMeta;
+export interface IFormula {
+    meta: FormulaMeta;
     cells: CellModel[][];
     id?: string;
 }
