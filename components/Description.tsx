@@ -17,7 +17,7 @@ const Container = styled.header`
 
     @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
         margin: 0 2em;
-        width: calc(100% - 2em);
+        width: calc(100% - 4em);
     }
 `;
 
