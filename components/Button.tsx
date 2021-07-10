@@ -61,6 +61,10 @@ const Label = styled.p`
   text-align: center;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5em;
 `;
 
 export const Button: React.FC<ButtonProps> = ({

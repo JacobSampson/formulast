@@ -5,14 +5,13 @@ import { Button } from '../components/Button';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
-import reducer from '../lib/store/reducers';
 import thunk from 'redux-thunk';
-import { DispatchType, GridAction, GridState } from '../lib/store';
+import { rootReducer, RootState } from '../lib/store/reducer';
+import { RootAction } from '../lib/store';
 
 const GlobalStyle = createGlobalStyle`${globalStyle}`;
-const store: Store<GridState, GridAction> & {
-  dispatch: DispatchType
-} = createStore(reducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, applyMiddleware(thunk));
+// const store: Store<RootState, RootAction> = createStore(rootReducer, applyMiddleware(thunk));
 
 function App({ Component, pageProps }) {
   const [theme, setTheme] = useState(lightTheme);

@@ -6,11 +6,7 @@ import { Aside } from '../components/Aside';
 import { Header } from '../components/Header';
 
 export interface LayoutProps {
-  user?: {};
   asides?: any;
-  onLogin: () => void;
-  onLogout: () => void;
-  onCreateAccount: () => void;
 }
 
 const Body = styled.div`
@@ -38,6 +34,15 @@ const Asides = styled.aside`
   grid-gap: 1em;
   flex-direction: column;
   width: 100%;
+  margin: 0 auto;
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.medium}) {
+    width: calc(100% - 4em);
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.screen.small}) {
+    width: 100%;
+  }
 `;
 
 const Container = styled.body`
@@ -48,12 +53,8 @@ const name = 'Jacob Sampson'
 export const siteTitle = 'formulast'
 
 export const Layout: React.FC<LayoutProps> = ({
-  user,
   asides,
-  children,
-  onLogin,
-  onLogout,
-  onCreateAccount
+  children
 }) => {  
   return (
     <Container>
@@ -73,7 +74,7 @@ export const Layout: React.FC<LayoutProps> = ({
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <StyledHeader user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />
+      <StyledHeader />
       <Body>
         {children}
         <Asides>{asides}</Asides>
@@ -81,3 +82,5 @@ export const Layout: React.FC<LayoutProps> = ({
     </Container>
   );
 };
+
+export default Layout;

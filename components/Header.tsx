@@ -4,12 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from './Button';
 
-export interface HeaderProps {
-  user?: {};
-  onLogin: () => void;
-  onLogout: () => void;
-  onCreateAccount: () => void;
-}
+export interface HeaderProps {}
 
 const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.large};
@@ -74,7 +69,7 @@ const StyledImage = styled(Image)`
 const StyledLink = styled.a`
   text-decoration: none;
   color: ${({ theme }) => theme.palette.common.black};
-  cursor: grab;
+  cursor: pointer;
 
   &:hover {
     text-decoration: none;
@@ -84,7 +79,7 @@ const StyledLink = styled.a`
 const InteractiveLink = styled.a`
   text-decoration: none;
   color: ${({ theme }) => theme.palette.common.black};
-  cursor: grab;
+  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize.large};
   font-weight: 100;
   margin: 0 1em;
@@ -113,15 +108,10 @@ const InteractiveLink = styled.a`
   }
 `;
 
-export const Header: React.FC<HeaderProps> = ({
-  user,
-  onLogin,
-  onLogout,
-  onCreateAccount
-}) => (
+export const Header: React.FC<HeaderProps> = () => (
   <Container>
     <Bar>
-      <Link href='/'>
+      <Link href='/formulas'>
         <StyledLink>
           <Title>
             <StyledImage
@@ -138,22 +128,9 @@ export const Header: React.FC<HeaderProps> = ({
 
       <Buttons>
         <Link href='/formulas'>
-          <InteractiveLink>
-            explore
-          </InteractiveLink>
+          <InteractiveLink>explore</InteractiveLink>
         </Link>
-        {/* TODO: Remove */}
-        {false && (user ? (
-          <Button size='medium' onClick={onLogout} square label='log out' />
-        ) : (
-          <>
-            <Button size='medium' label='log in' square active={false} />
-            <Button size='medium' label='create account' square />
-          </>
-        ))}
       </Buttons>
     </Bar>
-
-
   </Container>
 );

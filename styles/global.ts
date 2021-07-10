@@ -7,6 +7,8 @@ export const globalStyle = `
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     line-height: 1.6;
     font-size: 18px;
+    min-height: 100vh;
+    // display: grid;
   }
 
   * {

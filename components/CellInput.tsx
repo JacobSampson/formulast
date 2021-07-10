@@ -1,16 +1,19 @@
 import {  useState } from 'react';
+import { HiMenu } from 'react-icons/hi';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { evaluate } from '../lib/core';
-import { GridState, updateCellType, UPDATE_CELL_TYPE } from '../lib/store';
+import { deleteCell, GridState, RootState, updateCellType, UPDATE_CELL_TYPE } from '../lib/store';
 import { isNumber } from '../lib/util/numbers';
+import { defaultTransition } from '../styles/constants';
+import { Decision, EditBar } from './EditBar';
 
 export type Direction = 'none' | 'left' | 'right' | 'top' | 'bottom';
 export type InputType = 'text' | 'number' | 'constant' | 'function';
 
 export interface CellInputProps {
     direction?: Direction;
-    value: string;
+    value?: string;
     tag?: string;
     type?: InputType;
     live?: boolean;
@@ -40,9 +43,14 @@ const Container = styled.section<React.FC<CellInputProps>>`
     &:hover > .hideaway, &:focus-within > .hideaway {
         /* opacity: 0%; */
         /* height: 0%; */
-        transform: translateY(calc(100% + var(--local-gap)));
+        transform: translateY(calc(-1 * calc(100% + var(--local-gap))));
         opacity: 0.85;
         z-index: 10;
+    }
+
+    &:hover > .editbar {
+        opacity: 1;
+        user-select: auto;
     }
 
     /* &:focus-within, > .hideaway > * {
@@ -120,12 +128,31 @@ export const CellInput: React.FC<CellInputProps> = ({
 }) => {
     const [rawValue, setRawValue] = useState(value);
     const scope: Object = useSelector(
-        (state: GridState) => state.scope,
+        (state: RootState) => state.grid.scope,
         shallowEqual
     );
 
+    const mode = useSelector((state: RootState) => state.view.mode);
+
     const dispatch = useDispatch();
     const updateCell = (type: InputType) => dispatch(updateCellType(tag, type));
+
+    const onDecision = decision => {
+        switch(decision) {
+            case Decision.CHANGE_CELL_TO_LABEL: {
+                updateCell('text');
+                return;
+            }
+            case Decision.CHANGE_CELL_TO_FUNCTION: {
+                updateCell('function');
+                return;
+            }
+            case Decision.DELETE: {
+                dispatch(deleteCell(tag));
+                return;
+            }
+        }
+    }
 
     const updateRawValue = value => {
         let newValue = value;
@@ -155,6 +182,7 @@ export const CellInput: React.FC<CellInputProps> = ({
 
     return (
         <Container>
+            {mode === 'edit' && <EditBar onDecision={onDecision}></EditBar>}
             <Input
                 {...{ direction, ...props }}
                 disabled={disabled}

@@ -1,8 +1,11 @@
-import React from 'react';
-import { HiOutlineStar, HiPencilAlt, HiStar } from 'react-icons/hi';
+import React, { useState } from 'react';
+import { HiOutlineEye, HiOutlineSave, HiOutlineStar, HiPencilAlt, HiStar } from 'react-icons/hi';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { saveFormula } from '../lib/core/formula-converter';
 import { IAuthor } from '../lib/models/author';
 import { ITag } from '../lib/models/tag';
+import { RootState, setViewState, ViewMode, ViewState } from '../lib/store';
 import { Button } from './Button';
 
 export interface DescriptionProps {
@@ -85,6 +88,11 @@ export const Description: React.FC<DescriptionProps> = ({
     author,
     tags
 }) => {
+    const dispatch = useDispatch();
+    const setMode = (mode: ViewMode) => dispatch(setViewState(mode));
+    const mode = useSelector((state: RootState) => state.view.mode);
+    const { cells, meta } = useSelector((state: RootState) => state.grid);
+
     return (
         <Container>
             <Title>{title}</Title>
@@ -93,10 +101,23 @@ export const Description: React.FC<DescriptionProps> = ({
                 <Tags>
                     {tags && tags.map(({ label }) => <Tag key={label}>{label}</Tag>)}
                 </Tags>
-                {/* <Buttons>
-                    <Button size='medium'><HiPencilAlt /></Button>
-                    <Button size='medium' variant='primary'><HiOutlineStar /> 67</Button>
-                </Buttons> */}
+                <Buttons>
+                    <Button
+                        variant={mode === 'edit' ? 'secondary' : 'primary'}
+                        size='medium'
+                        onClick={() => mode === 'edit' ? setMode('view') : setMode('edit')}>
+                        {mode === 'view'
+                            ? <> <HiPencilAlt /> Edit </>
+                            : <> <HiOutlineEye /> View </>
+                        }
+                    </Button>
+                    <Button
+                        size='medium'
+                        onClick={() => saveFormula(cells, meta)}>
+                        <> <HiOutlineSave /> Save </>
+                    </Button>
+                    {/* <Button size='medium' variant='primary'><HiOutlineStar /> 67</Button> */}
+                </Buttons>
             </Elements>
             <DescriptionBlock>{description}</DescriptionBlock>
         </Container>

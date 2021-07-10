@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { Layout, LayoutProps } from '../layouts/Layout';
 import { CellModel } from '../lib/models';
-import { loadFunction } from '../lib/store';
+import { loadFormula } from '../lib/store';
 import { testCells, testCells__UCB } from './data/test___cells';
 import * as HeaderStories from './Header.stories';
 
@@ -16,7 +16,7 @@ export default {
 
 const Template: Story<LayoutProps> = (args) => {
   useDispatch()(
-    loadFunction(
+    loadFormula(
       testCells__UCB,
       {
         title: 'Title',
@@ -34,7 +34,7 @@ const Template: Story<LayoutProps> = (args) => {
   );
 
   return (
-    <Layout {...args} onCreateAccount={console.log} onLogin={console.log} onLogout={console.log} />
+    <Layout {...args} />
   );
 };
 

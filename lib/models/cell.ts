@@ -9,6 +9,6 @@ export enum CellType {
 
 export interface CellModel {
     type: CellType;
-    props: Partial<CellLabelProps> | Partial<CellInputProps>;
+    props: Partial<CellLabelProps> & Partial<CellInputProps>;
     tag?: string;
 }

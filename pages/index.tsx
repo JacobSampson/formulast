@@ -8,7 +8,7 @@ export default function Home() {
         <title>Formulast</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout onLogin={console.log} onLogout={console.log} onCreateAccount={console.log} />
+      <Layout />
     </>
   )
 }

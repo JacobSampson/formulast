@@ -2,7 +2,7 @@ import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { CellModel } from '../lib/models';
-import { GridState } from '../lib/store';
+import { GridState, RootState } from '../lib/store';
 import { Description, DescriptionProps } from './Description';
 import { Grid, GridProps } from './Grid';
 
@@ -30,12 +30,8 @@ const GridContainer = styled.div`
 export const Sheet: React.FC<SheetProps> = ({
 
 }) => {
-    const cells: readonly CellModel[][] = useSelector(
-        (state: GridState) => state.cells,
-        shallowEqual
-    );
-    const meta: DescriptionProps = useSelector(
-        (state: GridState) => state.meta,
+    const { cells, meta } = useSelector(
+        (state: RootState) => state.grid,
         shallowEqual
     );
 

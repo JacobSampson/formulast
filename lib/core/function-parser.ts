@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import { CellModel } from '../models';
+import { FormulaMeta, IFormula } from '../models/formula';
 
 const functionsDirectory = path.join(process.cwd(), 'content/functions')
 
@@ -32,7 +34,7 @@ export function getAllFormulaIds() {
   });
 }
 
-export async function getFormulaData(id: string) {
+export async function getFormulaData(id: string): Promise<IFormula> {
   const fullPath = path.join(functionsDirectory, `${id}.json`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const functionData = JSON.parse(fileContents);

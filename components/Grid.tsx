@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { HiMinus, HiPlus, HiPlusCircle, HiPlusSm } from 'react-icons/hi';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { CellModel, CellType } from '../lib/models/cell';
-import { updateCellValue } from '../lib/store';
+import { RootState, updateCellValue, updateSize } from '../lib/store';
 import { indicesToAlphanumeric, numberToLetters } from '../lib/util';
+import { defaultTransition } from '../styles/constants';
 import { CellInput, CellInputProps } from './CellInput';
 import { CellLabel, CellLabelProps } from './CellLabel';
 
@@ -12,6 +14,9 @@ interface Dimension {
     height: number;
 }
 
+const MAX_NUM_ROWS = 15;
+const MAX_NUM_COLUMNS = 5;
+
 export interface GridProps {
     /**
      * 2D array of cells
@@ -19,10 +24,72 @@ export interface GridProps {
     cells: readonly CellModel[][];
 }
 
-const Container = styled.section<Partial<GridProps> & ({ dimension: Dimension })>`
+const Container = styled.div`
     display: grid;
-    grid-template-columns: 2em repeat(${({ dimension }) => dimension.width}, 1fr);
-    grid-template-rows: 2em repeat(${({ dimension }) => dimension.height}, 1fr);
+    grid-template-columns: 1fr 2.5rem;
+    grid-template-rows: 1fr 2.5rem;
+    gap: 1em;
+    width: fit-content;
+`;
+
+const Buttons = styled.div<{ vertical?: boolean }>`
+    display: flex;
+    gap: 0.5em;
+
+    ${({ vertical }) => !vertical && `
+        margin-left: 2.25rem;
+        margin-right: 0.25rem;
+        flex-direction: row;
+    `}
+    ${({ vertical }) => vertical && `
+        margin-top: 2.25rem;
+        margin-bottom: 0.25rem;
+        flex-direction: column;
+    `}
+`;
+
+const UpdateButton = styled.button<{ mini?: boolean }>`
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  transition: ${defaultTransition};
+  flex: 1;
+
+  color: lightgray;
+  background-color: white;
+  border: 2px solid lightgray;
+  ${({ mini }) => mini && `
+    color: white;
+    background-color: lightgray;
+    flex: 0;
+    flex-basis: 2em;
+  `}
+
+  font-size: ${({ theme }) => theme.fontSize['large']};
+  padding: 0.5em 0;
+  box-shadow: 0.25em 0.25em 0.125em ${({ theme }) => theme.shadow.light};
+
+  animation: 0.25s ease-out 0s 1 popin;
+
+  :hover {
+    transform: translateY(0.125em);
+    box-shadow: 0.125em 0.125em 0px ${({ theme }) => theme.shadow.light};
+  }
+
+  :disabled {
+      user-select: none;
+      pointer-events:none;
+      filter: opacity(0.5);
+  }
+`;
+
+const GridContainer = styled.section<Partial<GridProps> & ({ dimension: Dimension })>`
+    display: grid;
+    grid-template-columns: 2rem repeat(${({ dimension }) => dimension.width}, 1fr);
+    grid-template-rows: 2rem repeat(${({ dimension }) => dimension.height}, 1fr);
     position: relative;
     width: fit-content;
 `;
@@ -78,51 +145,81 @@ export const Grid: React.FC<GridProps> = ({
         return (<></>);
     }
 
-    const dispatch = useDispatch();
-    const updateCell = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
-
     const gridDimension: Dimension = {
         width: cells[0].length,
         height: cells.length
     };
 
+    const dispatch = useDispatch();
+    const updateCell = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
+    const addColumn = () => dispatch(updateSize(gridDimension.width + 1, gridDimension.height ))
+    const addRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height + 1 ))
+    const removeColumn = () => dispatch(updateSize(gridDimension.width - 1, gridDimension.height ))
+    const removeRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height - 1 ))
+
+    const mode = useSelector((state: RootState) => state.view.mode);
+
     return (
-        <Container {...{ dimension: gridDimension, ...props }}>
-            <AxisLabel key={0} empty></AxisLabel>
-            {(new Array(gridDimension.width).fill(null)).map((_, index) => {
-                const colLabel = numberToLetters(index);
-                return <AxisLabel key={colLabel}>{colLabel}</AxisLabel>;
-            })}
-            {cells.map((row, rowIndex) => {
-                const rowCells = row.map((cell, colIndex) => {
-                    const key = indicesToAlphanumeric(rowIndex, colIndex);
+        <Container>
+            <GridContainer {...{ dimension: gridDimension, edit: mode === 'edit', ...props }}>
+                <AxisLabel key={0} empty></AxisLabel>
+                {(new Array(gridDimension.width).fill(null)).map((_, index) => {
+                    const colLabel = numberToLetters(index);
+                    return <AxisLabel key={colLabel}>{colLabel}</AxisLabel>;
+                })}
+                {cells.map((row, rowIndex) => {
+                    const rowCells = row.map((cell, colIndex) => {
+                        const key = indicesToAlphanumeric(rowIndex, colIndex);
 
-                    if (!cell) {
-                        return <Cell key={key} />
-                    }
+                        if (!cell) {
+                            if (mode === 'edit') {
+                                return <Cell empty key={key}>
+                                    <CellInput
+                                        live={false}
+                                        tag={key}
+                                        onChange={newValue => updateCell(indicesToAlphanumeric(rowIndex, colIndex), newValue)} />
+                                </Cell>
+                            }
 
-                    switch(cell.type) {
-                        case CellType.LABEL:
-                            return <Cell key={key}>
-                                <CellLabel {...(cell.props as CellLabelProps)} />
-                            </Cell>
-                        case CellType.INPUT:
-                            return <Cell key={key}>
-                                <CellInput
-                                    {...(cell.props as CellInputProps)}
-                                    tag={key}
-                                    onChange={newValue => updateCell(indicesToAlphanumeric(rowIndex, colIndex), newValue)} />
-                            </Cell>
-                        default:
-                            return <Cell empty key={key}/>
-                    }
-                });
-                const key = indicesToAlphanumeric(rowIndex, 0);
-                return <>
-                    <AxisLabel key={key}>{rowIndex}</AxisLabel>
-                    {rowCells}
+                            return <Cell key={key} />
+                        }
+
+                        switch(cell.type) {
+                            case CellType.LABEL:
+                                return <Cell key={key}>
+                                    <CellLabel {...(cell.props as CellLabelProps)} />
+                                </Cell>
+                            case CellType.INPUT:
+                                return <Cell key={key}>
+                                    <CellInput
+                                        {...(cell.props as CellInputProps)}
+                                        disabled={(mode === 'edit') ? false : cell.props.disabled}
+                                        tag={key}
+                                        onChange={newValue => updateCell(indicesToAlphanumeric(rowIndex, colIndex), newValue)} />
+                                </Cell>
+                            default:
+                                return <Cell empty key={key}/>
+                        }
+                    });
+                    const key = indicesToAlphanumeric(rowIndex, 0);
+                    return <>
+                        <AxisLabel key={key}>{rowIndex + 1}</AxisLabel>
+                        {rowCells}
+                    </>
+                })}
+            </GridContainer>
+            {mode === 'edit' &&
+                <>
+                    <Buttons vertical>
+                        <UpdateButton onClick={() => removeColumn()} mini disabled={gridDimension.width === 1}><HiMinus /></UpdateButton>
+                        <UpdateButton onClick={() => addColumn()} disabled={gridDimension.width === MAX_NUM_COLUMNS}><HiPlus /></UpdateButton>
+                    </Buttons>
+                    <Buttons>
+                        <UpdateButton onClick={() => removeRow()} mini disabled={gridDimension.height === 1}><HiMinus /></UpdateButton>
+                        <UpdateButton onClick={() => addRow()} disabled={gridDimension.height === MAX_NUM_ROWS}><HiPlus /></UpdateButton>
+                    </Buttons>
                 </>
-            })}
+            }
         </Container>
     );
 };

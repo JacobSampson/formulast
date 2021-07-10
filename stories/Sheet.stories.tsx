@@ -2,7 +2,7 @@ import { Story } from '@storybook/react';
 import { useDispatch } from 'react-redux';
 import { Sheet, SheetProps } from '../components/Sheet';
 import { CellModel, CellType } from '../lib/models/cell';
-import { loadCellValues, loadFunction } from '../lib/store';
+import { loadCellValues, loadFormula } from '../lib/store';
 import { testCells, testCells__UCB } from './data/test___cells';
 
 
@@ -13,7 +13,7 @@ export default {
 
 const Template: Story<SheetProps> = (cells: CellModel[][], args) => {
     useDispatch()(
-        loadFunction(
+        loadFormula(
             JSON.stringify(cells) === '{}' ? testCells : cells,
             {
                 title: 'Title',

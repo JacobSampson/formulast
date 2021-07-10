@@ -28,7 +28,7 @@ const Card = styled.a`
   background-color: ${({ theme }) => theme.palette.secondary.main};
   padding: 1em;
   color: ${({ theme }) => theme.palette.secondary.contrastText};
-  border-radius: 0.25em;
+  /* border-radius: 0.25em; */
   transform: scale(100%);
   display: block;
   cursor: pointer;
@@ -56,18 +56,17 @@ const FormulasPage: React.FC<FormulasPageProps> = ({
 }) => {
   return (
     <Layout
-      onLogin={console.log}
-      onLogout={console.log}
-      onCreateAccount={console.log}
       asides={<Aside title='How to Use' description={welcome}/>}>
       <Cards>
         <Title>Explore</Title>
         {formulas && formulas.length && formulas.map(formula => {
           const link = `/formulas/${formula.id}`;
-          return <Link href={link}>
+          const description = formula.meta.description;
+
+          return <Link href={link} key={link}>
             <Card title={formula.meta.title}>
               <h3>{formula.meta.title}</h3>
-              <p>{formula.meta.description}</p>
+              <p>{description}</p>
             </Card>
           </Link>
         })}
