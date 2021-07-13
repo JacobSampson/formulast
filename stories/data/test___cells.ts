@@ -1,14 +1,70 @@
 import { CellModel, CellType } from "../../lib/models";
 
-export const testCells: CellModel[][] = [
-    [{ type: CellType.INPUT, props: { value: '2', disabled: true } }, { type: CellType.LABEL, props: { label: 'Input 1', direction: 'left' } }, { type: CellType.INPUT, props: { type: 'function', value: '=2+2' } }],
-    [{ type: CellType.INPUT, props: { value: '2' } },  { type: CellType.LABEL, props: { label: 'Input 2', direction: 'right' } }, { type: CellType.INPUT, props: { value: '2' } }],
-    [null, null, { type: CellType.INPUT, props: { value: '=A1+4', disabled: true } }],
+export const testCells__UCB: CellModel[][] = [
+    [{"value": "\"Parent(n) Plays\"b" }, { "value": "\"Wins(n)\"b" }, { "value": "\"Plays(n)\"" }],
+    [{ "value": "2" }, { "value": "0" }, { "value": "1" }],
+    [null,null,null],
+    [{ "value": "\"UCB\"r", "variant": "primary" }, { "value": "=B2/C2+sqrt(2*log(A2,e)/C2)", "disabled": true },null]
 ];
 
-export const testCells__UCB: CellModel[][] = [
-    [{ type: CellType.LABEL, props: { label: 'Parent', direction: 'bottom' }}, { type: CellType.LABEL, props: { label: 'Wins', direction: 'bottom' }}, { type: CellType.LABEL, props: { label: 'Me', direction: 'bottom' }}],
-    [{ type: CellType.INPUT, props: { value: '2' }}, { type: CellType.INPUT, props: { value: '0' }}, { type: CellType.INPUT, props: { value: '1' }}],
-    [null,null,null],
-    [{ type: CellType.LABEL, props: { label: 'UCB', direction: 'right', variant: 'primary' }}, { type: CellType.INPUT, props: { value: '=B2/C2+sqrt(2*log(A2,e)/C2)', disabled: true }},null]
+export const testCells: CellModel[][] = [
+    [
+        {
+            "value": "\"Current Assets\"d",
+            "variant": "secondary",
+            "unit": "$"
+        },
+        {
+            "value": "\"Inventory\"d",
+            "variant": "secondary",
+            "unit": "$"
+        },
+        {
+            "value": "\"Current Liabilities\"d",
+            "variant": "secondary",
+            "unit": "$"
+        }
+    ],
+    [
+        {
+            "value": "1000",
+            "tag": "A2"
+        },
+        {
+            "value": "100",
+            "tag": "B2"
+        },
+        {
+            "value": "100",
+            "tag": "C2"
+        }
+    ],
+    [
+        null,
+        null,
+        null
+    ],
+    [
+        {
+            "value": "\"Quick Ratio\"r",
+            "variant": "primary",
+            "unit": "%"
+        },
+        {
+            "value": "=B5*100",
+            "tag": "B4"
+        },
+        null
+    ],
+    [
+        {
+            "value": "\"Quick Ratio\"r",
+            "variant": "primary"
+        },
+        {
+            "value": "=(A2-B2)/C2",
+            "tag": "B5"
+        },
+        null
+    ]
 ];

@@ -3,8 +3,8 @@ import { CellInputProps } from "../../../components/CellInput";
 import { evaluateExpressions } from "../../core";
 import { CellType } from "../../models";
 import { alphanumericToIndicies, deepCopy } from "../../util";
-import { loadCellValues, loadFormula, updateCellType, updateCellValue } from "../actions";
-import { DELETE_CELL, GridAction, GridState, LOAD_CELL_VALUES, LOAD_FORMULA, UPDATE_CELL_TYPE, UPDATE_CELL_VALUE, UPDATE_SIZE } from "../constants";
+import { loadCellValues, loadFormula, updateCellValue } from "../actions";
+import { DELETE_CELL, GridAction, GridState, LOAD_CELL_VALUES, LOAD_FORMULA, UPDATE_CELL_UNIT, UPDATE_CELL_VALUE, UPDATE_CELL_VARIANT, UPDATE_FORMULA_META, UPDATE_SIZE } from "../constants";
 
 export const emptyGridState: GridState  = {
     cells: [[]],
@@ -26,33 +26,22 @@ export const gridReducer = createReducer<GridState, GridAction>(emptyGridState)
             meta,
             scope
         }
-    })
-    .handleType(UPDATE_CELL_TYPE, (state, { payload }) => {
-        const cells = state.cells;
-
-        const { tag, type } = payload;
-        const { rowIndex, colIndex } = alphanumericToIndicies(tag);
-
-        const cell = (cells[rowIndex][colIndex].props as CellInputProps);
-        cell.type = type;
-
-        return {
-            ...state,
-            cells
-        }
     }).handleType(UPDATE_CELL_VALUE, (state, { payload }) => {
-        const cells = state.cells;
+        const cells = deepCopy(state.cells);
 
         const { tag, value } = payload;
         const { rowIndex, colIndex } = alphanumericToIndicies(tag);
 
-        // Add new cell props if none existed before
-        if (!cells[rowIndex][colIndex]) {
-            cells[rowIndex][colIndex] = { type: CellType.INPUT, props: {} };
+        if (value == null) {
+            cells[rowIndex][colIndex] = null;
+        } else {
+            // Add new cell props if none existed before
+            if (!cells[rowIndex][colIndex]) {
+                cells[rowIndex][colIndex] = { value: '' };
+            }
+            const cell = cells[rowIndex][colIndex];
+            cell.value = `${value}`;
         }
-
-        const cell = (cells[rowIndex][colIndex].props as CellInputProps);
-        cell.value = `${value}`;
 
         const scope = evaluateExpressions(state.cells);
 
@@ -111,7 +100,66 @@ export const gridReducer = createReducer<GridState, GridAction>(emptyGridState)
 
         cells[rowIndex][colIndex] = null;
         const scope = evaluateExpressions(cells);
-        console.log(state)
+
+        return {
+            ...state,
+            cells,
+            scope
+        };
+    }).handleType(UPDATE_FORMULA_META, (state, { payload }) => {
+        const { meta } = payload;
+        return {
+            ...state,
+            meta
+        };
+    }).handleType(UPDATE_CELL_UNIT, (state, { payload }) => {
+        const cells = state.cells;
+
+        const { tag, unit } = payload;
+        const { rowIndex, colIndex } = alphanumericToIndicies(tag);
+
+        // Add new cell props if none existed before
+        if (!cells[rowIndex][colIndex]) {
+            cells[rowIndex][colIndex] = { value: '' };
+        }
+
+        const cell = cells[rowIndex][colIndex];
+
+        if ((!unit || (unit === '')) && (cell.unit)) {
+            // Remove unit tag
+            delete cell.unit;
+        } else {
+            cell.unit = unit;
+        }
+
+        const scope = evaluateExpressions(state.cells);
+
+        return {
+            ...state,
+            cells,
+            scope
+        };
+    }).handleType(UPDATE_CELL_VARIANT, (state, { payload }) => {
+        const cells = state.cells;
+
+        const { tag, variant } = payload;
+        const { rowIndex, colIndex } = alphanumericToIndicies(tag);
+
+        // Add new cell props if none existed before
+        if (!cells[rowIndex][colIndex]) {
+            cells[rowIndex][colIndex] = { value: '' };
+        }
+
+        const cell = cells[rowIndex][colIndex];
+
+        if ((!variant || (variant === '')) && cell.variant) {
+            // Remove variant tag
+            delete cell.variant;
+        } else {
+            cell.variant = variant;
+        }
+
+        const scope = evaluateExpressions(state.cells);
 
         return {
             ...state,

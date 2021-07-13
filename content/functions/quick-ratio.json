@@ -1,0 +1,72 @@
+{
+    "cells": [
+        [
+            {
+                "value": "\"Current Assets\"d",
+                "variant": "secondary",
+                "unit": "$"
+            },
+            {
+                "value": "\"Inventory\"d",
+                "variant": "secondary",
+                "unit": "$"
+            },
+            {
+                "value": "\"Current Liabilities\"d",
+                "variant": "secondary",
+                "unit": "$"
+            }
+        ],
+        [
+            {
+                "value": "1000",
+                "tag": "A2"
+            },
+            {
+                "value": "100",
+                "tag": "B2"
+            },
+            {
+                "value": "100",
+                "tag": "C2"
+            }
+        ],
+        [
+            null,
+            null,
+            null
+        ],
+        [
+            {
+                "value": "\"Quick Ratio\"r",
+                "variant": "primary",
+                "unit": "%"
+            },
+            {
+                "value": "=B5*100",
+                "tag": "B4"
+            },
+            null
+        ],
+        [
+            {
+                "value": "\"Quick Ratio\"r",
+                "variant": "primary"
+            },
+            {
+                "value": "=(A2-B2)/C2",
+                "tag": "B5"
+            },
+            null
+        ]
+    ],
+    "meta": {
+        "title": "Quick Ratio",
+        "description": "Calculate a company's quick ratio using current assets, inventory, and current liabilities",
+        "tags": [
+            {
+                "label": "Accounting"
+            }
+        ]
+    }
+}

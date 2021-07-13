@@ -3,27 +3,30 @@ import { HiMenu } from 'react-icons/hi';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { evaluate } from '../lib/core';
-import { deleteCell, GridState, RootState, updateCellType, UPDATE_CELL_TYPE } from '../lib/store';
+import { determineType, getDirectionFromLabel, parseLabel } from '../lib/core/input-parser';
+import { deleteCell, GridState, RootState, updateCellUnit, updateCellValue, updateCellVariant, ViewMode } from '../lib/store';
 import { isNumber } from '../lib/util/numbers';
-import { defaultTransition } from '../styles/constants';
 import { Decision, EditBar } from './EditBar';
 
 export type Direction = 'none' | 'left' | 'right' | 'top' | 'bottom';
-export type InputType = 'text' | 'number' | 'constant' | 'function';
+export type Variant = 'primary' | 'secondary';
+export type InputType = 'function' | 'label' | 'value' | 'empty';
+export type Unit = '$' | 'in' | string;
 
 export interface CellInputProps {
-    direction?: Direction;
+    unit?: Unit;
     value?: string;
+    variant?: Variant;
     tag?: string;
-    type?: InputType;
     live?: boolean;
     clearable?: boolean;
-    placeHolder?: string;
     disabled?: boolean;
-    onChange: (newValue: string) => void;
+    onChange?: (newValue: string) => void;
 };
 
-const Container = styled.section<React.FC<CellInputProps>>`
+const Container = styled.section<
+    React.FC<CellInputProps> & ({ inUse: boolean })
+>`
     --local-gap: var(--gap, 0.5em);
 
     height: calc(100% - var(--local-gap));
@@ -34,7 +37,7 @@ const Container = styled.section<React.FC<CellInputProps>>`
     margin: calc(var(--local-gap) / 2);
     z-index: 2;
     position: relative;
-
+    
     &:hover, &:focus-within {
         z-index: 10;
         cursor: text;
@@ -44,8 +47,17 @@ const Container = styled.section<React.FC<CellInputProps>>`
         /* opacity: 0%; */
         /* height: 0%; */
         transform: translateY(calc(-1 * calc(100% + var(--local-gap))));
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
         opacity: 0.85;
         z-index: 10;
+    }
+
+    &:hover > .fade, &:focus-within > .fade {
+        opacity: 0;
+        pointer-events: none;
     }
 
     &:hover > .editbar {
@@ -53,12 +65,22 @@ const Container = styled.section<React.FC<CellInputProps>>`
         user-select: auto;
     }
 
-    /* &:focus-within, > .hideaway > * {
-        display: none;
-    }*/
+    ${({ inUse, theme }) => inUse && `
+        &:after {
+            content: '';
+            width: 0.5rem;
+            height: 0.5rem;
+            left: 0.5rem;
+            position: absolute;
+            background-color: ${theme.palette.secondary.main};
+            border-radius: 50%;
+        }
+    `}
 `;
 
-const Input = styled.input<Partial<CellInputProps>>`
+const Input = styled.input<
+    Partial<CellInputProps>
+>`
     flex-grow: 1;
     height: 100%;
     padding: 0;
@@ -90,7 +112,11 @@ const Clear = styled.div`
     font-weight: 800;
 `;
 
-const Value = styled.div`
+const Value = styled.div<
+    { direction: Direction, type: InputType, variant: Variant }
+>`
+    --local-gap: var(--gap, 0.5rem);
+
     width: 100%;
     height: 100%;
     background-color: ${({ theme }) => theme.palette.primary.main};
@@ -112,15 +138,54 @@ const Value = styled.div`
         text-overflow: ellipsis;
         padding: 0 1em;
     }
+
+    ${({ direction, type }) => {
+        if (direction === 'none' || type !== 'label') return;
+
+        const dimension = ['top', 'bottom'].includes(direction) ? 'height' : 'width';
+
+        return `
+            ${dimension}: calc(100% + var(--local-gap));
+            margin-${direction}: calc(var(--local-gap) * -1);
+            padding-${direction}: var(--local-gap);
+        `;
+    }}
+
+    // Color
+
+    ${({ theme, variant, type }) => {
+    if (type !== 'label') return;
+
+    const backGroundColor = variant ? theme.palette[variant].main : 'lightgray';
+    const text = variant ? theme.palette[variant].contrastText : 'white';
+
+    return `
+        color: ${text};
+        background-color: ${backGroundColor};
+        border-color: ${backGroundColor};
+    `;}}
+`;
+
+const Label = styled.p`
+  text-align: center;
+  padding: 0 1em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+`;
+
+const Unit = styled.p`
+    margin: 0 0 0 0.5rem;
+    opacity: 0.5;
+    font-size: 75%;
 `;
 
 export const CellInput: React.FC<CellInputProps> = ({
-    direction = 'none',
-    type = 'text',
-    placeHolder = '',
+    unit,
+    variant,
     clearable = false,
     disabled = false,
-    value = '',
+    value,
     live = true,
     tag,
     onChange,
@@ -135,69 +200,88 @@ export const CellInput: React.FC<CellInputProps> = ({
     const mode = useSelector((state: RootState) => state.view.mode);
 
     const dispatch = useDispatch();
-    const updateCell = (type: InputType) => dispatch(updateCellType(tag, type));
 
-    const onDecision = decision => {
+    const setCellValue = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
+    const setCellVariant = (tag: string, variant: Variant) => dispatch(updateCellVariant(tag, variant));
+    const setCellUnit = (tag: string, value: Unit) => dispatch(updateCellUnit(tag, value))
+
+    const onDecision = (decision, payload) => {
         switch(decision) {
             case Decision.CHANGE_CELL_TO_LABEL: {
-                updateCell('text');
+                setRawValue('""');
                 return;
             }
             case Decision.CHANGE_CELL_TO_FUNCTION: {
-                updateCell('function');
+                setRawValue('=');
                 return;
             }
             case Decision.DELETE: {
-                dispatch(deleteCell(tag));
+                setCellValue(tag, null);
+                return;
+            }
+            case Decision.CHANGE_CELL_UNIT: {
+                setCellUnit(tag, payload);
+                return;
+            }
+            case Decision.CHANGE_VARIANT: {
+                setCellVariant(tag, payload);
                 return;
             }
         }
     }
 
-    const updateRawValue = value => {
+    const updateRawValue = (value, type) => {
         let newValue = value;
-        // if (type !== 'function' && value.toString().charAt(0) === '=') {
-        //     setRawValue('=');
-        //     updateCell('function');
-        //     return;
-        // } else
         if (type === 'number' && !(isNumber(value))) {
             newValue = '';
+        } else if (type === 'label') {
+            setRawValue(value);
+            return;
         }
         
         setRawValue(newValue);
         if (type === 'number' || live) {
-            onChange(newValue);
+            onUpdate(newValue);
         }
     };
 
-    const isFunction = (value) => value.toString().charAt(0) === '=';
+    const onUpdate = value => {
+        setCellValue(tag, value);
+        if (onChange) {
+            onChange(value);
+        }
+    }
 
-    // const computedValue: string = useSelector(
-    //     (state: GridState) => state.scope[tag],
-    //     shallowEqual
-    // );
-    // const valueText = computedValue == null ? evaluate(rawValue).toString() : computedValue;
-    const valueText = evaluate(rawValue, scope).toString();
+    const direction = getDirectionFromLabel(rawValue);
+    const type: InputType = determineType(rawValue);
+    const valueText = !value ? '' : type === 'label' ? parseLabel(rawValue) : evaluate(rawValue, scope).toString();
 
     return (
-        <Container>
+        <Container inUse={mode === 'edit' && value != null}>
             {mode === 'edit' && <EditBar onDecision={onDecision}></EditBar>}
             <Input
-                {...{ direction, ...props }}
+                {...{...props }}
                 disabled={disabled}
                 type={type}
+                variant={variant}
                 value={rawValue}
-                placeholder={placeHolder}
-                onBlur={() => onChange(rawValue)}
-                onChange={event => updateRawValue(event.target.value)}
+                onBlur={() => onUpdate(rawValue)}
+                onChange={event => updateRawValue(event.target.value, type)}
             />
-            {((type === 'function') || (isFunction(rawValue))) &&
-                <Value className='hideaway' title={valueText}>
-                    <p>{valueText}</p>
+            {((type === 'function') || (type === 'label')) &&
+                <Value
+                    className={mode === 'edit' ? 'fade' : type === 'function' ? 'hideaway' : ''}
+                    title={valueText}
+                    type={type}
+                    variant={variant}
+                    direction={direction}>
+                    <Label>
+                        {valueText}
+                        {unit && <Unit>{unit}</Unit>}
+                    </Label>
                 </Value>
             }
-            {clearable && <Clear onClick={() => updateRawValue('')}>✕</Clear>}
+            {clearable && <Clear onClick={() => updateRawValue('', type)}>✕</Clear>}
         </Container>
     );
 };

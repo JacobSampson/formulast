@@ -3,10 +3,10 @@ import { HiMinus, HiPlus, HiPlusCircle, HiPlusSm } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { CellModel, CellType } from '../lib/models/cell';
-import { RootState, updateCellValue, updateSize } from '../lib/store';
+import { RootState, updateCellValue, updateCellUnit, updateSize } from '../lib/store';
 import { indicesToAlphanumeric, numberToLetters } from '../lib/util';
 import { defaultTransition } from '../styles/constants';
-import { CellInput, CellInputProps } from './CellInput';
+import { CellInput, CellInputProps, Unit } from './CellInput';
 import { CellLabel, CellLabelProps } from './CellLabel';
 
 interface Dimension {
@@ -97,7 +97,7 @@ const GridContainer = styled.section<Partial<GridProps> & ({ dimension: Dimensio
 const Cell = styled.div<{ empty?: boolean }>`
     height: 100%;
     min-height: 50px;
-    width: 200px;
+    width: 220px;
     position: relative;
     ${({ empty }) => empty
         ? `
@@ -141,9 +141,7 @@ export const Grid: React.FC<GridProps> = ({
     cells = [],
     ...props
 }) => {
-    if (!cells || !cells.length || !cells[0].length) {
-        return (<></>);
-    }
+    if (!cells || !cells.length || !cells[0].length) return (<></>);
 
     const gridDimension: Dimension = {
         width: cells[0].length,
@@ -151,11 +149,13 @@ export const Grid: React.FC<GridProps> = ({
     };
 
     const dispatch = useDispatch();
-    const updateCell = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
-    const addColumn = () => dispatch(updateSize(gridDimension.width + 1, gridDimension.height ))
-    const addRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height + 1 ))
-    const removeColumn = () => dispatch(updateSize(gridDimension.width - 1, gridDimension.height ))
-    const removeRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height - 1 ))
+
+    const setCellValue = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
+    const setCellUnit = (tag: string, value: Unit) => dispatch(updateCellUnit(tag, value))
+    const addColumn = () => dispatch(updateSize(gridDimension.width + 1, gridDimension.height ));
+    const addRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height + 1 ));
+    const removeColumn = () => dispatch(updateSize(gridDimension.width - 1, gridDimension.height ));
+    const removeRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height - 1 ));
 
     const mode = useSelector((state: RootState) => state.view.mode);
 
@@ -174,32 +174,19 @@ export const Grid: React.FC<GridProps> = ({
                         if (!cell) {
                             if (mode === 'edit') {
                                 return <Cell empty key={key}>
-                                    <CellInput
-                                        live={false}
-                                        tag={key}
-                                        onChange={newValue => updateCell(indicesToAlphanumeric(rowIndex, colIndex), newValue)} />
+                                    <CellInput live={false} tag={key} />
                                 </Cell>
                             }
 
                             return <Cell key={key} />
                         }
 
-                        switch(cell.type) {
-                            case CellType.LABEL:
-                                return <Cell key={key}>
-                                    <CellLabel {...(cell.props as CellLabelProps)} />
-                                </Cell>
-                            case CellType.INPUT:
-                                return <Cell key={key}>
-                                    <CellInput
-                                        {...(cell.props as CellInputProps)}
-                                        disabled={(mode === 'edit') ? false : cell.props.disabled}
-                                        tag={key}
-                                        onChange={newValue => updateCell(indicesToAlphanumeric(rowIndex, colIndex), newValue)} />
-                                </Cell>
-                            default:
-                                return <Cell empty key={key}/>
-                        }
+                        return <Cell key={key}>
+                            <CellInput
+                                {...(cell as CellInputProps)}
+                                disabled={(mode === 'edit') ? false : cell.disabled}
+                                tag={key} />
+                        </Cell>
                     });
                     const key = indicesToAlphanumeric(rowIndex, 0);
                     return <>

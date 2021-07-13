@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router'
 import { HiOutlineEye, HiOutlineSave, HiOutlineStar, HiPencilAlt, HiStar } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { saveFormula } from '../lib/core/formula-converter';
 import { IAuthor } from '../lib/models/author';
 import { ITag } from '../lib/models/tag';
-import { RootState, setViewState, ViewMode, ViewState } from '../lib/store';
+import { saveFormula } from '../lib/services/formulas';
+import { RootState, setViewState, updateFormulaMeta, ViewMode } from '../lib/store';
 import { Button } from './Button';
+import { FieldInput } from './FieldInput';
+import { Pill } from './Pill';
+import { CellModel } from '../lib/models';
+import { FormulaMeta } from '../lib/models/formula';
 
 export interface DescriptionProps {
     title: string;
@@ -58,16 +63,12 @@ const Tags = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 0.5rem;
 `;
 
 const Tag = styled.div`
-    background-color: ${({ theme }) => theme.palette.primary.main};
-    color: ${({ theme }) => theme.palette.primary.contrastText};
-    border-radius: 2em;
-    padding: 0.25em 1em;
-    font-size: ${({ theme }) => theme.fontSize.small};
     height: calc(${({ theme }) => theme.fontSize.small} * 2);
-    margin-right: 1em;
+    font-size: ${({ theme }) => theme.fontSize.small};
 `;
 
 const Buttons = styled.div`
@@ -81,7 +82,7 @@ const Buttons = styled.div`
 const DescriptionBlock = styled.p`
     font-size: ${({ theme }) => theme.fontSize.medium};
 `;
-
+const Input = styled.input``;
 export const Description: React.FC<DescriptionProps> = ({
     title,
     description,
@@ -89,17 +90,61 @@ export const Description: React.FC<DescriptionProps> = ({
     tags
 }) => {
     const dispatch = useDispatch();
+    const router = useRouter();
+
     const setMode = (mode: ViewMode) => dispatch(setViewState(mode));
+    const updateMeta = (update: any) => dispatch(updateFormulaMeta({
+        title,
+        description,
+        author,
+        tags,
+        ...update
+    }));
+
+    const addTag = (newTag) => {
+        if (tags.find(tag => tag.label === newTag)) {
+            return;
+        }
+
+        updateMeta({
+            tags: [...tags, { parent: '', label: newTag }]
+        });
+    }
+
+    const removeTag = (removedTag: string) => {
+        const updatedTags = tags.filter(tag => tag.label != removedTag);
+        updateMeta({
+            tags: updatedTags
+        });
+    }
+
+    const setFormula = (cells: CellModel[][], meta: FormulaMeta) => {
+        saveFormula(cells, meta).then(response => {
+            if (response?.redirect?.destination) router.push(response.redirect.destination);
+        });
+    }    
+
     const mode = useSelector((state: RootState) => state.view.mode);
+    const editable = mode === 'edit';
     const { cells, meta } = useSelector((state: RootState) => state.grid);
 
     return (
         <Container>
-            <Title>{title}</Title>
+            <Title>
+                <FieldInput
+                    value={title}
+                    editable={editable}
+                    onChange={event => updateMeta({ title: event.target.value })}></FieldInput>
+            </Title>
             {author && <Author>Created by {author.username}</Author>}
             <Elements>
                 <Tags>
-                    {tags && tags.map(({ label }) => <Tag key={label}>{label}</Tag>)}
+                    {tags && tags.map(({ label }) => {
+                        return <Tag key={label}>
+                            <Pill value={label} editable={editable} onAction={() => removeTag(label)}/>
+                        </Tag>
+                    })}
+                    {tags && editable && <Tag><Pill add editable onAction={(newTag) => addTag(newTag)}/></Tag>}
                 </Tags>
                 <Buttons>
                     <Button
@@ -113,13 +158,20 @@ export const Description: React.FC<DescriptionProps> = ({
                     </Button>
                     <Button
                         size='medium'
-                        onClick={() => saveFormula(cells, meta)}>
+                        onClick={() => setFormula(cells, meta)}>
                         <> <HiOutlineSave /> Save </>
                     </Button>
                     {/* <Button size='medium' variant='primary'><HiOutlineStar /> 67</Button> */}
                 </Buttons>
             </Elements>
-            <DescriptionBlock>{description}</DescriptionBlock>
+            <DescriptionBlock>
+            <FieldInput
+                value={description}
+                area
+                editable={mode === 'edit'}
+                onChange={event => updateMeta({ description: event.target.value })}
+            />
+            </DescriptionBlock>
         </Container>
     )
 }

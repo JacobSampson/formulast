@@ -17,11 +17,13 @@ export type GridAction = {
 };
 
 export const UPDATE_CELL_VALUE = 'UPDATE_CELL_VALUE';
-export const UPDATE_CELL_TYPE = 'UPDATE_CELL_TYPE';
+export const UPDATE_CELL_UNIT = 'UPDATE_CELL_UNIT';
+export const UPDATE_CELL_VARIANT = 'UPDATE_CELL_VARIANT';
 export const LOAD_CELL_VALUES = 'LOAD_CELL_VALUES';
 export const LOAD_FORMULA = 'LOAD_FORMULA';
 export const UPDATE_SIZE = 'UPDATE_SIZE';
 export const DELETE_CELL = 'DELETE_CELL';
+export const UPDATE_FORMULA_META = 'UPDATE_FORMULA_META';
 
 /**
  * VIEW
