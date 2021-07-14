@@ -93,6 +93,10 @@ const StyledEditBar = styled(EditBar)`
     }
 `;
 
+const StyledPill = styled(Pill)`
+    width: '3rem';
+`;
+
 export const Description: React.FC<DescriptionProps> = ({
     title,
     description,
@@ -112,9 +116,8 @@ export const Description: React.FC<DescriptionProps> = ({
     }));
 
     const addTag = (newTag) => {
-        if (tags.find(tag => tag.label === newTag)) {
-            return;
-        }
+        if (!newTag || (newTag === '')) return;
+        if (tags.find(tag => tag.label === newTag)) return;
 
         updateMeta({
             tags: [...tags, { parent: '', label: newTag }]
@@ -154,7 +157,7 @@ export const Description: React.FC<DescriptionProps> = ({
                             <Pill value={label} editable={editable} onAction={() => removeTag(label)}/>
                         </Tag>
                     })}
-                    {tags && editable && <Tag><Pill add editable onAction={(newTag) => addTag(newTag)}/></Tag>}
+                    {tags && editable && <Tag><StyledPill add editable onAction={(newTag) => addTag(newTag)}/></Tag>}
                 </Tags>
                 <Buttons>
                     <Button
