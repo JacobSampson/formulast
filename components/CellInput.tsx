@@ -124,6 +124,7 @@ const Value = styled.div<
     --local-gap: var(--gap, 0.5rem);
 
     width: 100%;
+    min-width: 100%;
     height: 100%;
     background-color: ${({ theme }) => theme.palette.primary.main};
     color: ${({ theme }) => theme.palette.primary.contrastText};
