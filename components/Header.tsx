@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from './Button';
@@ -76,7 +77,7 @@ const StyledLink = styled.a`
   }
 `;
 
-const InteractiveLink = styled.a`
+const InteractiveLink = styled.a<{ active: boolean }>`
   text-decoration: none;
   color: ${({ theme }) => theme.palette.common.black};
   cursor: pointer;
@@ -106,10 +107,16 @@ const InteractiveLink = styled.a`
     opacity: 80%;
     width: 100%;
   }
+
+  ${({ active }) => active && `
+      &:after { width: 100% }
+  `}
 `;
 
-export const Header: React.FC<HeaderProps> = () => (
-  <Container>
+export const Header: React.FC<HeaderProps> = () => {
+  const router = useRouter();
+
+  return (<Container>
     <Bar>
       <Link href='/formulas'>
         <StyledLink>
@@ -128,9 +135,9 @@ export const Header: React.FC<HeaderProps> = () => (
 
       <Buttons>
         <Link href='/formulas'>
-          <InteractiveLink>explore</InteractiveLink>
+          <InteractiveLink active={router.pathname === '/formulas'}>explore</InteractiveLink>
         </Link>
       </Buttons>
     </Bar>
-  </Container>
-);
+  </Container>)
+};

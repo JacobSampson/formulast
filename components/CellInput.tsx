@@ -1,12 +1,12 @@
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { evaluate } from '../lib/core';
 import { determineType, getDirectionFromLabel, parseLabel } from '../lib/core/input-parser';
-import { deleteCell, GridState, RootState, updateCellUnit, updateCellValue, updateCellVariant, ViewMode } from '../lib/store';
+import { deleteCell, GridState, RootState, setActiveCell, updateCellValue, ViewMode } from '../lib/store';
 import { isNumber } from '../lib/util/numbers';
-import { Decision, EditBar } from './EditBar';
+import { defaultTransition } from '../styles/constants';
 
 export type Direction = 'none' | 'left' | 'right' | 'top' | 'bottom';
 export type Variant = 'primary' | 'secondary';
@@ -25,7 +25,7 @@ export interface CellInputProps {
 };
 
 const Container = styled.section<
-    React.FC<CellInputProps> & ({ inUse: boolean })
+    React.FC<CellInputProps> & ({ inUse: boolean, isActive: boolean })
 >`
     --local-gap: var(--gap, 0.5em);
 
@@ -37,6 +37,8 @@ const Container = styled.section<
     margin: calc(var(--local-gap) / 2);
     z-index: 2;
     position: relative;
+
+    transition: ${defaultTransition};
     
     &:hover, &:focus-within {
         z-index: 10;
@@ -60,10 +62,14 @@ const Container = styled.section<
         pointer-events: none;
     }
 
-    &:hover > .editbar {
-        opacity: 1;
-        user-select: auto;
+    &:hover > .expand, &:focus-within > .expand {
+        width: fit-content;
+        max-width: 250%;
     }
+
+    ${({ isActive }) => isActive && `
+        border: 3px solid black;
+    `}
 
     ${({ inUse, theme }) => inUse && `
         &:after {
@@ -146,6 +152,7 @@ const Value = styled.div<
 
         return `
             ${dimension}: calc(100% + var(--local-gap));
+            min-${dimension}: calc(100% + var(--local-gap));
             margin-${direction}: calc(var(--local-gap) * -1);
             padding-${direction}: var(--local-gap);
         `;
@@ -196,39 +203,22 @@ export const CellInput: React.FC<CellInputProps> = ({
         (state: RootState) => state.grid.scope,
         shallowEqual
     );
-
     const mode = useSelector((state: RootState) => state.view.mode);
+    const activeCell = useSelector((state: RootState) => state.view.activeCell);
+    const isActiveCell = activeCell?.tag === tag;
+
+    // Handles outside inputs
+    useEffect(() => {
+        setRawValue(value);
+
+        if (isActiveCell && (activeCell?.value !== value) || (activeCell?.disabled !== disabled)) {
+            dispatch(setActiveCell({ ...activeCell, value, disabled }));
+        }
+    }, [value, disabled]);
 
     const dispatch = useDispatch();
 
     const setCellValue = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
-    const setCellVariant = (tag: string, variant: Variant) => dispatch(updateCellVariant(tag, variant));
-    const setCellUnit = (tag: string, value: Unit) => dispatch(updateCellUnit(tag, value))
-
-    const onDecision = (decision, payload) => {
-        switch(decision) {
-            case Decision.CHANGE_CELL_TO_LABEL: {
-                setRawValue('""');
-                return;
-            }
-            case Decision.CHANGE_CELL_TO_FUNCTION: {
-                setRawValue('=');
-                return;
-            }
-            case Decision.DELETE: {
-                setCellValue(tag, null);
-                return;
-            }
-            case Decision.CHANGE_CELL_UNIT: {
-                setCellUnit(tag, payload);
-                return;
-            }
-            case Decision.CHANGE_VARIANT: {
-                setCellVariant(tag, payload);
-                return;
-            }
-        }
-    }
 
     const updateRawValue = (value, type) => {
         let newValue = value;
@@ -256,21 +246,23 @@ export const CellInput: React.FC<CellInputProps> = ({
     const type: InputType = determineType(rawValue);
     const valueText = !value ? '' : type === 'label' ? parseLabel(rawValue) : evaluate(rawValue, scope).toString();
 
+    const onFocus = () => dispatch(setActiveCell({ unit, value: value == null ? value : valueText, variant, disabled, tag }));
+
     return (
-        <Container inUse={mode === 'edit' && value != null}>
-            {mode === 'edit' && <EditBar onDecision={onDecision}></EditBar>}
+        <Container inUse={mode === 'edit' && type === 'value' || value === ''} isActive={mode === 'edit' && isActiveCell}>
             <Input
                 {...{...props }}
-                disabled={disabled}
+                disabled={mode !== 'edit' && disabled}
                 type={type}
                 variant={variant}
                 value={rawValue}
-                onBlur={() => onUpdate(rawValue)}
+                onFocus={() => onFocus()}
+                onBlur={() => { onUpdate(rawValue); }}
                 onChange={event => updateRawValue(event.target.value, type)}
             />
             {((type === 'function') || (type === 'label')) &&
                 <Value
-                    className={mode === 'edit' ? 'fade' : type === 'function' ? 'hideaway' : ''}
+                    className={mode === 'edit' ? 'fade' : type === 'function' ? 'hideaway' : 'expand'}
                     title={valueText}
                     type={type}
                     variant={variant}

@@ -4,7 +4,7 @@ import { evaluateExpressions } from "../../core";
 import { CellType } from "../../models";
 import { alphanumericToIndicies, deepCopy } from "../../util";
 import { loadCellValues, loadFormula, updateCellValue } from "../actions";
-import { DELETE_CELL, GridAction, GridState, LOAD_CELL_VALUES, LOAD_FORMULA, UPDATE_CELL_UNIT, UPDATE_CELL_VALUE, UPDATE_CELL_VARIANT, UPDATE_FORMULA_META, UPDATE_SIZE } from "../constants";
+import { DELETE_CELL, GridAction, GridState, LOAD_CELL_VALUES, LOAD_FORMULA, UPDATE_CELL_META, UPDATE_CELL_VALUE, UPDATE_FORMULA_META, UPDATE_SIZE } from "../constants";
 
 export const emptyGridState: GridState  = {
     cells: [[]],
@@ -43,7 +43,7 @@ export const gridReducer = createReducer<GridState, GridAction>(emptyGridState)
             cell.value = `${value}`;
         }
 
-        const scope = evaluateExpressions(state.cells);
+        const scope = evaluateExpressions(cells);
 
         return {
             ...state,
@@ -112,10 +112,10 @@ export const gridReducer = createReducer<GridState, GridAction>(emptyGridState)
             ...state,
             meta
         };
-    }).handleType(UPDATE_CELL_UNIT, (state, { payload }) => {
-        const cells = state.cells;
+    }).handleType(UPDATE_CELL_META, (state, { payload }) => {
+        const cells = deepCopy(state.cells);
 
-        const { tag, unit } = payload;
+        const { tag, unit, variant, disabled } = payload;
         const { rowIndex, colIndex } = alphanumericToIndicies(tag);
 
         // Add new cell props if none existed before
@@ -132,26 +132,6 @@ export const gridReducer = createReducer<GridState, GridAction>(emptyGridState)
             cell.unit = unit;
         }
 
-        const scope = evaluateExpressions(state.cells);
-
-        return {
-            ...state,
-            cells,
-            scope
-        };
-    }).handleType(UPDATE_CELL_VARIANT, (state, { payload }) => {
-        const cells = state.cells;
-
-        const { tag, variant } = payload;
-        const { rowIndex, colIndex } = alphanumericToIndicies(tag);
-
-        // Add new cell props if none existed before
-        if (!cells[rowIndex][colIndex]) {
-            cells[rowIndex][colIndex] = { value: '' };
-        }
-
-        const cell = cells[rowIndex][colIndex];
-
         if ((!variant || (variant === '')) && cell.variant) {
             // Remove variant tag
             delete cell.variant;
@@ -159,11 +139,15 @@ export const gridReducer = createReducer<GridState, GridAction>(emptyGridState)
             cell.variant = variant;
         }
 
-        const scope = evaluateExpressions(state.cells);
+        if (disabled == null || !disabled) {
+            // Remove disabled tag as is default
+            delete cell.disabled;
+        } else {
+            cell.disabled = true;
+        }
 
         return {
             ...state,
-            cells,
-            scope
+            cells
         };
     });

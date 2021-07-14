@@ -17,8 +17,7 @@ export type GridAction = {
 };
 
 export const UPDATE_CELL_VALUE = 'UPDATE_CELL_VALUE';
-export const UPDATE_CELL_UNIT = 'UPDATE_CELL_UNIT';
-export const UPDATE_CELL_VARIANT = 'UPDATE_CELL_VARIANT';
+export const UPDATE_CELL_META = 'UPDATE_CELL_META';
 export const LOAD_CELL_VALUES = 'LOAD_CELL_VALUES';
 export const LOAD_FORMULA = 'LOAD_FORMULA';
 export const UPDATE_SIZE = 'UPDATE_SIZE';
@@ -37,10 +36,12 @@ export type ViewAction = {
 export type ViewMode = 'edit' | 'view' | 'create';
 
 export type ViewState = {
-    mode: ViewMode
+    mode: ViewMode,
+    activeCell?: CellModel
 }
 
 export const SET_VIEW_STATE = 'SET_VIEW_STATE';
+export const SET_ACTIVE_CELL = 'SET_ACTIVE_CELL';
 
 /**
  * ROOT

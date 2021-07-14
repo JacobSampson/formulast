@@ -19,7 +19,7 @@ const Container = styled.section<Partial<SheetProps>>`
 const GridContainer = styled.div`
     margin-left: -2em;
     overflow-x: auto;
-    padding: 1em 0 3em 0;
+    padding: 1em 0 1em 0;
     width: 100%;
 
     @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {

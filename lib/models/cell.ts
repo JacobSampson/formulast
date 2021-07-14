@@ -15,4 +15,5 @@ export interface CellModel {
     variant?: Variant,
     disabled?: boolean;
     tag?: string;
+    type?: InputType;
 }

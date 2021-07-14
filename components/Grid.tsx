@@ -3,7 +3,7 @@ import { HiMinus, HiPlus, HiPlusCircle, HiPlusSm } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { CellModel, CellType } from '../lib/models/cell';
-import { RootState, updateCellValue, updateCellUnit, updateSize } from '../lib/store';
+import { RootState, updateCellValue, updateSize } from '../lib/store';
 import { indicesToAlphanumeric, numberToLetters } from '../lib/util';
 import { defaultTransition } from '../styles/constants';
 import { CellInput, CellInputProps, Unit } from './CellInput';
@@ -150,8 +150,6 @@ export const Grid: React.FC<GridProps> = ({
 
     const dispatch = useDispatch();
 
-    const setCellValue = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
-    const setCellUnit = (tag: string, value: Unit) => dispatch(updateCellUnit(tag, value))
     const addColumn = () => dispatch(updateSize(gridDimension.width + 1, gridDimension.height ));
     const addRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height + 1 ));
     const removeColumn = () => dispatch(updateSize(gridDimension.width - 1, gridDimension.height ));
@@ -184,7 +182,6 @@ export const Grid: React.FC<GridProps> = ({
                         return <Cell key={key}>
                             <CellInput
                                 {...(cell as CellInputProps)}
-                                disabled={(mode === 'edit') ? false : cell.disabled}
                                 tag={key} />
                         </Cell>
                     });

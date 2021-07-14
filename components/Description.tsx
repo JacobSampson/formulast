@@ -12,6 +12,7 @@ import { FieldInput } from './FieldInput';
 import { Pill } from './Pill';
 import { CellModel } from '../lib/models';
 import { FormulaMeta } from '../lib/models/formula';
+import { EditBar } from './EditBar';
 
 export interface DescriptionProps {
     title: string;
@@ -82,7 +83,16 @@ const Buttons = styled.div`
 const DescriptionBlock = styled.p`
     font-size: ${({ theme }) => theme.fontSize.medium};
 `;
-const Input = styled.input``;
+
+const StyledEditBar = styled(EditBar)`
+    @media screen and (max-width: ${({ theme }) => theme.screen.medium}) {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 2.5rem 2.5rem;
+        height: 5rem;
+    }
+`;
+
 export const Description: React.FC<DescriptionProps> = ({
     title,
     description,
@@ -172,6 +182,7 @@ export const Description: React.FC<DescriptionProps> = ({
                 onChange={event => updateMeta({ description: event.target.value })}
             />
             </DescriptionBlock>
+            {mode === 'edit' && <StyledEditBar />}
         </Container>
     )
 }

@@ -21,14 +21,15 @@ export default (request: NextApiRequest, response: NextApiResponse) => {
 
   parsedFormula.cells = cells.map((row) => {
     return row.map((cell) => {
-        if (cell) {
-        return {
-          value: cell.value,
-          variant: cell.variant,
-          tag: cell.tag,
-          unit: cell.unit,
-          disabled: cell.disabled,
-        };
+      if (cell) {
+        const parsedCell: CellModel = { value: cell.value };
+
+        // Only add non-default values
+        if (cell.variant) { parsedCell.variant = cell.variant };
+        if (cell.disabled) { parsedCell.disabled = cell.disabled };
+        if (cell.unit) { parsedCell.unit = cell.unit };
+
+        return parsedCell;
       }
     });
   });
