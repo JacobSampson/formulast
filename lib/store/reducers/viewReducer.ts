@@ -1,24 +1,43 @@
-import { createReducer } from "typesafe-actions";
-import { setViewState } from "../actions";
-import { SET_ACTIVE_CELL, SET_VIEW_STATE, ViewAction, ViewState } from "../constants";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CellModel } from "../../models";
 
-export const defaultViewState: ViewState = {
+export type ViewMode = 'edit' | 'view' | 'create';
+
+export type ViewState = {
+    mode: ViewMode,
+    activeCell?: CellModel
+}
+
+const initialState: ViewState = {
     mode: 'view',
     activeCell: null
 };
 
-export const viewReducer = createReducer<ViewState, ViewAction>(defaultViewState)
-    .handleType(SET_VIEW_STATE, (state, { payload }) => {
-        const { mode } = payload;
-        return {
-            ...state,
-            mode
-        };
-    }).handleType(SET_ACTIVE_CELL, (state, { payload }) => {
-        const { cell } = payload;
+const view = createSlice({
+    name: 'view',
+    initialState,
+    reducers: {
+        setViewState(state, { payload }: PayloadAction<{ mode: ViewMode }>) {
+            const { mode } = payload;
+            return {
+                ...state,
+                mode
+            };
+    
+        },
+        setActiveCell(state, { payload }:PayloadAction<{ cell: CellModel }>) {
+            const { cell } = payload;
 
-        return {
-            ...state,
-            activeCell: cell
+            return {
+                ...state,
+                activeCell: cell
+            }    
         }
-    });
+    }
+});
+
+export const {
+    setViewState,
+    setActiveCell
+} = view.actions;
+export default view.reducer;

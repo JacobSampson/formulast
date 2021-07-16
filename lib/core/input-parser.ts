@@ -16,7 +16,7 @@ export const determineType = (value?: string): InputType => {
 
     const isFunction = value.toString().charAt(0) === '=';
     const isLabel = (value.toString().charAt(0) === '"')
-        || (value.toString()).match(/\".*\"(u|d|r|l|)/);
+        || (value.toString()).match(/\".*\"/);
 
     if (isFunction) {
         return 'function';
@@ -27,21 +27,4 @@ export const determineType = (value?: string): InputType => {
     }
 
     return !value || value.toString().length === 0 ? 'empty' : 'value';
-}
-
-export const getDirectionFromLabel = (rawLabel?: string): Direction => {
-    if (rawLabel && (rawLabel.toString()).match(/\".*\"(u|d|r|l)/)) {
-        const directionValue = rawLabel.split('"')[2];
-        switch(directionValue) {
-            case 'u':
-                return 'top';
-            case 'd':
-                return 'bottom';
-            case 'l':
-                return 'left';
-            case 'r':
-                return 'right';
-        }
-    }
-    return 'none'
 }

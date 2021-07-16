@@ -106,7 +106,7 @@ export const Description: React.FC<DescriptionProps> = ({
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const setMode = (mode: ViewMode) => dispatch(setViewState(mode));
+    const setMode = (mode: ViewMode) => dispatch(setViewState({ mode }));
     const updateMeta = (update: any) => dispatch(updateFormulaMeta({
         title,
         description,

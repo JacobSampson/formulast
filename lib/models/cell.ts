@@ -1,4 +1,4 @@
-import { CellInputProps, InputType, Unit, Variant } from "../../components/CellInput";
+import { CellInputProps, Direction, InputType, Unit, Variant } from "../../components/CellInput";
 import { CellLabelProps, Direction as CellLabelDirection } from "../../components/CellLabel";
 
 export enum CellType {
@@ -16,4 +16,5 @@ export interface CellModel {
     disabled?: boolean;
     tag?: string;
     type?: InputType;
+    direction?: Direction;
 }

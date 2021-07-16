@@ -13,9 +13,9 @@ export default {
 
 const Template: Story<SheetProps> = (cells: CellModel[][], args) => {
     useDispatch()(
-        loadFormula(
-            JSON.stringify(cells) === '{}' ? testCells : cells,
-            {
+        loadFormula({
+            cells: JSON.stringify(cells) === '{}' ? testCells : cells,
+            meta: {
                 title: 'Title',
                 description: 'Convert numbers between hexadecimal/decimal/binary',
                 author: {
@@ -27,7 +27,7 @@ const Template: Story<SheetProps> = (cells: CellModel[][], args) => {
                   { label: 'Programming' }
                 ]
             }
-        )
+        })
     );
 
     return (

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { HiLockClosed, HiMenu, HiOutlineArrowLeft, HiOutlineColorSwatch, HiOutlineEye, HiOutlineEyeOff, HiOutlineLockClosed, HiOutlineLockOpen, HiTrash, HiX } from "react-icons/hi";
+import { HiArrowDown, HiArrowLeft, HiArrowRight, HiArrowUp, HiLockClosed, HiMenu, HiOutlineArrowLeft, HiOutlineColorSwatch, HiOutlineEye, HiOutlineEyeOff, HiOutlineLockClosed, HiOutlineLockOpen, HiTrash, HiX } from "react-icons/hi";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BsTextareaT } from "react-icons/bs";
 import { MdFunctions } from "react-icons/md";
@@ -7,8 +7,8 @@ import styled from "styled-components";
 import { defaultTransition } from "../styles/constants";
 import { FieldInput } from "./FieldInput";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCell, RootState, updateCellMeta, updateCellValue } from "../lib/store";
 import { InputType, Unit, Variant } from "./CellInput";
+import { deleteCell, RootState, updateCellMeta, updateCellValue } from "../lib/store";
 
 export enum Decision {
     'CHANGE_CELL_TO_LABEL',
@@ -31,6 +31,7 @@ const Container = styled.div<{ disabled?: boolean }>`
     width: 100%;
     left: 0;
     grid-auto-rows: 1fr;
+    gap: 6px;
 
     animation: 0.25s ease-out 0s 1 popin;
 
@@ -40,6 +41,30 @@ const Container = styled.div<{ disabled?: boolean }>`
         cursor: default;
         opacity: 0.5;
     `}
+
+    position: sticky;
+    top: 0;
+    :host { display: block; }
+    position: -webkit-sticky !important; // for safari
+    position: sticky !important;
+    top: 0;
+    align-self: flex-start;
+    height: auto;
+    z-index: 100000;
+    :host
+    {
+        position: sticky;
+        display: block;   // this is the same as shown above
+        top: 0;
+        background: red;    
+    }
+
+    &.sticky {
+        position: fixed;
+        top: 0;
+        background-color: lightgray;
+        padding: 6px;
+    }
 `;
 
 
@@ -57,7 +82,6 @@ const Item = styled.button<
   text-align: center;
   cursor: pointer;
   color: lightgray;
-  border-width: 0;
   border-radius: 0;
   display: flex;
   justify-content: center;
@@ -129,10 +153,10 @@ const Field = styled.div`
   z-index: 50;
   filter: sepia(0%);
 
-  :not(:first-of-type) {
-      /* transform: translateY(-2px); */
+  /* :not(:first-of-type) {
+      transform: translateY(-2px);
       border-left-width: 0px;
-  }
+  } */
 `;
 
 const Label = styled.p<{ variant?: Variant, locked?: boolean }>`
@@ -144,7 +168,6 @@ const Label = styled.p<{ variant?: Variant, locked?: boolean }>`
     display: flex;
     align-items: center;
     border: 2px solid lightgray;
-    border-right-width: 0px;
     font-size: ${({ theme }) => theme.fontSize.medium};
 
     color: rgba(0, 0, 0, 0.5);
@@ -175,11 +198,11 @@ export const EditBar: React.FC<EditBarProps> = ({
     const cell = useSelector((state: RootState) => state.view.activeCell);
     const tag = cell?.tag;
 
-    const onCellValueChange = () => dispatch(updateCellValue(tag, ''));
-    const onCreateLabel = () => dispatch(updateCellValue(tag, '""'));
-    const onCreateFunction = () => dispatch(updateCellValue(tag, '='));
-    const onDelete = () => dispatch(deleteCell(tag));
-    const onMetaChange = payload => dispatch(updateCellMeta(tag, { ...cell, ...payload }));
+    const onCellValueChange = () => dispatch(updateCellValue({ tag, value: '' }));
+    const onCreateLabel = () => dispatch(updateCellValue({ tag, value: '""' }));
+    const onCreateFunction = () => dispatch(updateCellValue({ tag, value: '=' }));
+    const onDelete = () => dispatch(deleteCell({ tag }));
+    const onMetaChange = payload => dispatch(updateCellMeta({ ...cell, tag, ...payload }));
 
     const options = [
         (<Field>
@@ -229,7 +252,34 @@ export const EditBar: React.FC<EditBarProps> = ({
             </Item>
             <Item
                 onClick={() => onMetaChange({ variant: null })}
-                title={'Remove Variance'}>
+                title={'Remove Style'}>
+                <HiX />
+            </Item>
+        </Field>),
+        (<Field style={{ gridColumn: 'span 5' }}>
+            <Item
+                onClick={() => onMetaChange({ direction: 'left' })}
+                title={'Left'}>
+                <HiArrowLeft />
+            </Item>
+            <Item
+                onClick={() => onMetaChange({ direction: 'top' })}
+                title={'Up'}>
+                <HiArrowUp />
+            </Item>
+            <Item
+                onClick={() => onMetaChange({ direction: 'bottom' })}
+                title={'Down'}>
+                <HiArrowDown />
+            </Item>
+            <Item
+                onClick={() => onMetaChange({ direction: 'right'})}
+                title={'Right'}>
+                <HiArrowRight />
+            </Item>
+            <Item
+                onClick={() => onMetaChange({ direction: null })}
+                title={'Remove'}>
                 <HiX />
             </Item>
         </Field>),
@@ -259,10 +309,10 @@ export const EditBar: React.FC<EditBarProps> = ({
     ];
 
     return <Container
-        disabled={!cell}
+        disabled={!tag}
         title='Open Cell Options'
         className='editbar'>
-        {cell &&
+        {tag &&
             <Label
                 variant={cell.variant}>
                 {cell.value}

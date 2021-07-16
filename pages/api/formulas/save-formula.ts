@@ -28,6 +28,7 @@ export default (request: NextApiRequest, response: NextApiResponse) => {
         if (cell.variant) { parsedCell.variant = cell.variant };
         if (cell.disabled) { parsedCell.disabled = cell.disabled };
         if (cell.unit) { parsedCell.unit = cell.unit };
+        if (cell.direction) { parsedCell.direction = cell.direction };
 
         return parsedCell;
       }

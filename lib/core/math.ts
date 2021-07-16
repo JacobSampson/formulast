@@ -31,7 +31,6 @@ export const evaluateExpressions = (cells: CellModel[][]): Object => {
         for (let colIndex = 0; colIndex < cells[rowIndex].length; colIndex++) {
             const cell = cells[rowIndex][colIndex];
             if (cell && (['function', 'value'].includes(determineType(cell.value)))) {
-                cell.tag = indicesToAlphanumeric(rowIndex, colIndex);
                 cellInputs.push(cell);
             }
         }

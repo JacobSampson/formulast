@@ -24,6 +24,7 @@ const Input = styled.input`
     border: none;
     margin: 0;
     border-radius: 0;
+    width: 100%;
 `;
 
 const InputArea = styled.textarea`

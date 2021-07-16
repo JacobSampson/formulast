@@ -16,9 +16,9 @@ export default {
 
 const Template: Story<LayoutProps> = (args) => {
   useDispatch()(
-    loadFormula(
-      testCells__UCB,
-      {
+    loadFormula({
+      cells: testCells__UCB,
+      meta: {
         title: 'Title',
         description: 'Convert numbers between hexadecimal/decimal/binary',
         author: {
@@ -30,7 +30,7 @@ const Template: Story<LayoutProps> = (args) => {
           { label: 'Programming' }
         ]
       }
-    )
+    })
   );
 
   return (

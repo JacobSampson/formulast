@@ -20,7 +20,7 @@ const FormulaPage: React.FC<FormulaPageProps> = ({
     formula
 }) => {
   const dispatch = useDispatch();
-  dispatch(loadFormula(formula.cells, formula.meta));
+  dispatch(loadFormula({ cells: formula.cells, meta: formula.meta }));
 
   return (
     <Layout

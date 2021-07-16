@@ -3,8 +3,8 @@ import { HiMenu } from 'react-icons/hi';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { evaluate } from '../lib/core';
-import { determineType, getDirectionFromLabel, parseLabel } from '../lib/core/input-parser';
-import { deleteCell, GridState, RootState, setActiveCell, updateCellValue, ViewMode } from '../lib/store';
+import { determineType, parseLabel } from '../lib/core/input-parser';
+import { RootState, setActiveCell, updateCellValue, ViewMode } from '../lib/store';
 import { isNumber } from '../lib/util/numbers';
 import { defaultTransition } from '../styles/constants';
 
@@ -20,6 +20,7 @@ export interface CellInputProps {
     tag?: string;
     live?: boolean;
     clearable?: boolean;
+    direction?: Direction;
     disabled?: boolean;
     onChange?: (newValue: string) => void;
 };
@@ -189,12 +190,13 @@ const Unit = styled.p`
 `;
 
 export const CellInput: React.FC<CellInputProps> = ({
-    unit,
-    variant,
     clearable = false,
     disabled = false,
-    value,
     live = true,
+    direction = 'none',
+    unit,
+    variant,
+    value,
     tag,
     onChange,
     ...props
@@ -213,13 +215,13 @@ export const CellInput: React.FC<CellInputProps> = ({
         setRawValue(value);
 
         if (isActiveCell && (activeCell?.value !== value) || (activeCell?.disabled !== disabled)) {
-            dispatch(setActiveCell({ ...activeCell, value, disabled }));
+            dispatch(setActiveCell({ cell: { ...activeCell, value, disabled }}));
         }
     }, [value, disabled]);
 
     const dispatch = useDispatch();
 
-    const setCellValue = (tag: string, value: string | number) => dispatch(updateCellValue(tag, value));
+    const setCellValue = (tag: string, value: string | number) => dispatch(updateCellValue({ tag, value }));
 
     const updateRawValue = (value, type) => {
         let newValue = value;
@@ -243,11 +245,10 @@ export const CellInput: React.FC<CellInputProps> = ({
         }
     }
 
-    const direction = getDirectionFromLabel(rawValue);
     const type: InputType = determineType(rawValue);
     const valueText = !value ? '' : type === 'label' ? parseLabel(rawValue) : evaluate(rawValue, scope).toString();
 
-    const onFocus = () => dispatch(setActiveCell({ unit, value: value == null ? value : valueText, variant, disabled, tag }));
+    const onFocus = () => dispatch(setActiveCell({ cell: { unit, value: value == null ? value : valueText, variant, disabled, tag, direction }}));
 
     return (
         <Container inUse={mode === 'edit' && type === 'value' || value === ''} isActive={mode === 'edit' && isActiveCell}>

@@ -3,7 +3,7 @@ import { HiMinus, HiPlus, HiPlusCircle, HiPlusSm } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { CellModel, CellType } from '../lib/models/cell';
-import { RootState, updateCellValue, updateSize } from '../lib/store';
+import { RootState, updateSize } from '../lib/store';
 import { indicesToAlphanumeric, numberToLetters } from '../lib/util';
 import { defaultTransition } from '../styles/constants';
 import { CellInput, CellInputProps, Unit } from './CellInput';
@@ -150,10 +150,10 @@ export const Grid: React.FC<GridProps> = ({
 
     const dispatch = useDispatch();
 
-    const addColumn = () => dispatch(updateSize(gridDimension.width + 1, gridDimension.height ));
-    const addRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height + 1 ));
-    const removeColumn = () => dispatch(updateSize(gridDimension.width - 1, gridDimension.height ));
-    const removeRow = () => dispatch(updateSize(gridDimension.width, gridDimension.height - 1 ));
+    const addColumn = () => dispatch(updateSize({ width: gridDimension.width + 1, height: gridDimension.height }));
+    const addRow = () => dispatch(updateSize({ width: gridDimension.width, height: gridDimension.height + 1 }));
+    const removeColumn = () => dispatch(updateSize({ width: gridDimension.width - 1, height: gridDimension.height }));
+    const removeRow = () => dispatch(updateSize({ width: gridDimension.width, height: gridDimension.height - 1 }));
 
     const mode = useSelector((state: RootState) => state.view.mode);
 
