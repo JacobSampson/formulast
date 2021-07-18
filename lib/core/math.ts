@@ -24,14 +24,16 @@ export const evaluateExpressions = (cells: CellModel[][]): Object => {
     if (!cells || !cells.length || !cells[0].length) {
         return;
     }
+    debugger;
     
     // Filter out inputs
-    const cellInputs = [];
+    const cellInputs: [string, CellModel][] = [];
     for (let rowIndex = 0; rowIndex < cells.length; rowIndex++) {
         for (let colIndex = 0; colIndex < cells[rowIndex].length; colIndex++) {
             const cell = cells[rowIndex][colIndex];
             if (cell && (['function', 'value'].includes(determineType(cell.value)))) {
-                cellInputs.push(cell);
+                const tag = indicesToAlphanumeric(rowIndex, colIndex);
+                cellInputs.push([tag, cell]);
             }
         }
     }
@@ -45,12 +47,12 @@ export const evaluateExpressions = (cells: CellModel[][]): Object => {
             untouched = true;
         }
 
-        const cell = cellInputs[currIndex] as CellModel;
+        const [tag, cell] = cellInputs[currIndex];
 
         const value = evaluate(cell.value, scope);
         if (isNumber(value.toString())) {
             // Update value for cell in scope
-            scope[cell.tag] = value;
+            scope[tag] = value;
     
             // Remove successful calculation
             cellInputs.splice(currIndex, 1);
@@ -67,7 +69,7 @@ export const evaluateExpressions = (cells: CellModel[][]): Object => {
                 // throw new Error('Incorrect function sequence');
                 return {
                     ...scope,
-                    [(cell.tag)]: 'NAN'
+                    [tag]: 'NAN'
                 };
             }
 
