@@ -10,7 +10,7 @@ export type ViewState = {
 
 const initialState: ViewState = {
     mode: 'view',
-    activeCell: null
+    // activeCell
 };
 
 const view = createSlice({
@@ -23,7 +23,6 @@ const view = createSlice({
                 ...state,
                 mode
             };
-    
         },
         setActiveCell(state, { payload }:PayloadAction<{ cell: CellModel }>) {
             const { cell } = payload;

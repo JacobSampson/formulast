@@ -11,6 +11,7 @@ import { Aside } from '../../components/Aside'
 import { HiStar } from 'react-icons/hi'
 import { explanation } from '../../lib/core/language/site'
 import { indicesToAlphanumeric } from '../../lib/util'
+import { ResourceService } from '../../lib/services/resource-service'
 
 export interface FormulaPageProps {
   formula: IFormula;
