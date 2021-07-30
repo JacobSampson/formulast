@@ -3,7 +3,7 @@ import { darkTheme, lightTheme } from '../styles/themes';
 import { globalStyle } from '../styles/global';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import configureAppStore from '../lib/store/store';
+import configureAppStore from '../lib/client/store/store';
 
 const GlobalStyle = createGlobalStyle`${globalStyle}`;
 const store = configureAppStore();

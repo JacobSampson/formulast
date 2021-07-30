@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { HiArrowDown, HiArrowLeft, HiArrowRight, HiArrowUp, HiLockClosed, HiMenu, HiOutlineArrowLeft, HiOutlineColorSwatch, HiOutlineEye, HiOutlineEyeOff, HiOutlineLockClosed, HiOutlineLockOpen, HiTrash, HiX } from "react-icons/hi";
+import React, { useState } from "react";
+import { HiArrowDown, HiArrowLeft, HiArrowRight, HiArrowUp, HiLockClosed, HiOutlineEye, HiOutlineEyeOff, HiOutlineLockClosed, HiOutlineLockOpen, HiTrash, HiX } from "react-icons/hi";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BsTextareaT } from "react-icons/bs";
 import { MdFunctions } from "react-icons/md";
@@ -7,8 +7,8 @@ import styled from "styled-components";
 import { defaultTransition } from "../styles/constants";
 import { FieldInput } from "./FieldInput";
 import { useDispatch, useSelector } from "react-redux";
-import { InputType, Unit, Variant } from "./CellInput";
-import { deleteCell, RootState, updateCellMeta, updateCellValue } from "../lib/store";
+import { Variant } from "./CellInput";
+import { RootState, updateCellValue, deleteCell, updateCellMeta } from "../lib/client";
 
 export enum Decision {
     'CHANGE_CELL_TO_LABEL',

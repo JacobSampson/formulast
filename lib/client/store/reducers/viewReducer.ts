@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CellModel } from "../../models";
+import { CellModel } from "../../../core";
 
 export type ViewMode = 'edit' | 'view' | 'create';
 

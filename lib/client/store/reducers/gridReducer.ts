@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Direction, Variant } from "../../../components/CellInput";
-import { evaluateExpressions } from "../../core";
-import { CellModel   } from "../../models";
-import { FormulaMeta } from "../../models/formula";
-import { alphanumericToIndicies, deepCopy } from "../../util";
+import { Direction, Variant } from "../../../../components/CellInput";
+import { alphanumericToIndicies, deepCopy } from "../../../core";
+import { evaluateExpressions } from "../../../core/math";
+import { CellModel, FormulaMeta } from "../../../core/models";
 
 export type GridState = {
     cells: CellModel[][];
@@ -119,11 +118,15 @@ const grid = createSlice({
                 scope
             };
         },
-        updateFormulaMeta(state, { payload }: PayloadAction<{ meta: FormulaMeta }>) {
-            const { meta } = payload;
+        updateFormulaMeta(state, { payload }: PayloadAction<FormulaMeta>) {
+            const meta = payload;
+
             return {
                 ...state,
-                meta
+                meta: {
+                    ...state.meta,
+                    ...meta
+                }
             };
         },
         updateCellMeta(

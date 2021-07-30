@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { CellModel } from '../models';
-import { FormulaMeta, IFormula } from '../models/formula';
+import { IFormula } from '../../core';
 
 const functionsDirectory = path.join(process.cwd(), 'content/functions');
 

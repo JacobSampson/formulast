@@ -1,10 +1,9 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { CellModel } from '../lib/models';
-import { GridState, RootState } from '../lib/store';
-import { Description, DescriptionProps } from './Description';
-import { Grid, GridProps } from './Grid';
+import { RootState } from '../lib/client';
+import { Description } from './Description';
+import { Grid } from './Grid';
 
 export interface SheetProps{
 

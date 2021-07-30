@@ -1,4 +1,4 @@
-import { CellModel, CellType } from "../../lib/models";
+import { CellModel } from "../../lib/core";
 
 export const testCells__UCB: CellModel[][] = [
     [{"value": "\"Parent(n) Plays\"b" }, { "value": "\"Wins(n)\"b" }, { "value": "\"Plays(n)\"" }],

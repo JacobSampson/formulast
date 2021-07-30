@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CellModel } from '../../../lib/models';
-import { FormulaMeta } from '../../../lib/models/formula';
-import { ResourceService } from '../../../lib/services/resource-service';
+import { CellModel, FormulaMeta } from '../../../lib/core';
+import { ResourceService } from '../../../lib/server';
 
 interface SaveFormulaRequest {
   cells: CellModel[][];
@@ -35,11 +34,10 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   const formulaId = meta.title.replace(/ /g, '-').toLowerCase();
   const resourceService = new ResourceService();
 
-  const { errors, redirect } = await resourceService.saveFormula(formulaId, parsedFormula);
-  if (!errors) {
+  try {
+    const { redirect } = await resourceService.saveFormula(formulaId, parsedFormula);
     response.status(200).json({ id: redirect });
-    return;
-  }
+  } catch {}
 
   response.status(500);
 };

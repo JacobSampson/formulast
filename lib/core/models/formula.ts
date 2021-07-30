@@ -1,4 +1,4 @@
-import { DescriptionProps } from "../../components/Description";
+import { DescriptionProps } from "../../../components/Description";
 import { CellModel } from "./cell";
 
 export type FormulaMeta = DescriptionProps;

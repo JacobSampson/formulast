@@ -1,11 +1,11 @@
-import { IFormula } from '../../lib/models/formula'
+import { IFormula } from '../../lib/core'
 import { Layout } from '../../layouts/Layout'
 import { useDispatch } from 'react-redux'
-import { loadFormula } from '../../lib/store'
+import { loadFormula } from '../../lib/client'
 import { Sheet } from '../../components/Sheet'
 import { Aside } from '../../components/Aside'
 import { explanation } from '../../lib/core/language/site'
-import { ResourceService, TableType } from '../../lib/services/resource-service'
+import { ResourceService, TableType } from '../../lib/server/services/resource-service'
 
 export interface FormulaPageProps {
   formula: IFormula;

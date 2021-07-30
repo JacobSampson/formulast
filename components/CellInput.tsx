@@ -2,10 +2,9 @@ import {  useEffect, useState } from 'react';
 import { HiMenu } from 'react-icons/hi';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { evaluate } from '../lib/core';
-import { determineType, parseLabel } from '../lib/core/input-parser';
-import { RootState, setActiveCell, updateCellValue, ViewMode } from '../lib/store';
-import { isNumber } from '../lib/util/numbers';
+import { RootState, setActiveCell, updateCellValue } from '../lib/client';
+import { evaluate, isNumber } from '../lib/core';
+import { determineType, parseLabel } from '../lib/core/util/input-parser';
 import { defaultTransition } from '../styles/constants';
 
 export type Direction = 'none' | 'left' | 'right' | 'top' | 'bottom';
@@ -215,7 +214,16 @@ export const CellInput: React.FC<CellInputProps> = ({
         setRawValue(value);
 
         if (isActiveCell && (activeCell?.value !== value) || (activeCell?.disabled !== disabled)) {
-            dispatch(setActiveCell({ cell: { ...activeCell, value, disabled }}));
+            dispatch(setActiveCell({
+                cell: {
+                    ...activeCell,
+                    value,
+                    disabled,
+                    direction,
+                    variant,
+                    unit
+                }
+            }));
         }
     }, [value, disabled]);
 

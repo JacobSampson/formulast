@@ -1,1 +1,61 @@
-{"cells":[[{"value":"\"Parent(n) Plays\"d","variant":"secondary"},{"value":"\"Wins(n)\"d","variant":"secondary"},{"value":"\"Plays(n)\"d","variant":"secondary"}],[{"value":"2"},{"value":"0"},{"value":"1"}],[null,null,null],[{"value":"\"UCB\"r","variant":"primary"},{"value":"=B2/C2+sqrt(2*log(A2,e)/C2)","disabled":true},null]],"meta":{"title":"Upper Confidence Bound","description":"Upper-Confidence Bound (UCB) applied to trees where UCB is calculated using the plays of the parent (Parent(n) Plays), the plays of the child node (Plays(n)) and the wins of the child node (Wins(n))","tags":[{"label":"Coding"},{"label":"AI"}]}}
+{
+    "cells": [
+        [
+            {
+                "value": "\"Parent(n) Plays\"",
+                "variant": "secondary",
+                "direction": "down"
+            },
+            {
+                "value": "\"Wins(n)\"",
+                "variant": "secondary",
+                "direction": "down"
+            },
+            {
+                "value": "\"Plays(n)\"",
+                "variant": "secondary",
+                "direction": "down"
+            }
+        ],
+        [
+            {
+                "value": "2"
+            },
+            {
+                "value": "0"
+            },
+            {
+                "value": "1"
+            }
+        ],
+        [
+            null,
+            null,
+            null
+        ],
+        [
+            {
+                "value": "\"UCB\"",
+                "variant": "primary",
+                "direction": "right"
+            },
+            {
+                "value": "=B2/C2+sqrt(2*log(A2,e)/C2)",
+                "disabled": true
+            },
+            null
+        ]
+    ],
+    "meta": {
+        "title": "Upper Confidence Bound",
+        "description": "Upper-Confidence Bound (UCB) applied to trees where UCB is calculated using the plays of the parent (Parent(n) Plays), the plays of the child node (Plays(n)) and the wins of the child node (Wins(n))",
+        "tags": [
+            {
+                "label": "Coding"
+            },
+            {
+                "label": "AI"
+            }
+        ]
+    }
+}

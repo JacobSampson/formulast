@@ -1,8 +1,8 @@
 import { Story } from '@storybook/react';
 import { useDispatch } from 'react-redux';
 import { Sheet, SheetProps } from '../components/Sheet';
-import { CellModel, CellType } from '../lib/models/cell';
-import { loadCellValues, loadFormula } from '../lib/store';
+import { CellModel, CellType } from '../lib/core';
+import { loadCellValues, loadFormula } from '../lib/client';
 import { testCells, testCells__UCB } from './data/test___cells';
 
 

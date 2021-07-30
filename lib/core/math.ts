@@ -1,8 +1,7 @@
 import * as math from 'mathjs';
-import { CellModel, CellType } from '../models/cell';
-import { indicesToAlphanumeric } from '../util';
-import { isNumber } from '../util/numbers';
-import { determineType } from './input-parser';
+import { CellModel } from './models';
+import { indicesToAlphanumeric, isNumber } from './util';
+import { determineType } from './util/input-parser';
 
 export const evaluate = (expression: string, scope = {}): number | string => {
     if ((!expression) || (expression.length === 0)) {
@@ -24,7 +23,6 @@ export const evaluateExpressions = (cells: CellModel[][]): Object => {
     if (!cells || !cells.length || !cells[0].length) {
         return;
     }
-    debugger;
     
     // Filter out inputs
     const cellInputs: [string, CellModel][] = [];

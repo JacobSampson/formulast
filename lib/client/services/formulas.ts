@@ -1,5 +1,4 @@
-import { CellModel } from "../models";
-import { FormulaMeta } from "../models/formula";
+import { CellModel, FormulaMeta } from "../../core";
 
 export async function saveFormula(cells: CellModel[][], meta: FormulaMeta) {
     const response = await fetch('/api/formulas/save-formula', {
@@ -11,7 +10,7 @@ export async function saveFormula(cells: CellModel[][], meta: FormulaMeta) {
     });
 
     const { id } = await response.json();
-    console.log('id', id);
+
     if (!id) {
         return {
             redirect: {

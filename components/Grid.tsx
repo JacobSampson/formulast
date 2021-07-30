@@ -1,13 +1,11 @@
-import React, { useCallback, useState } from 'react';
-import { HiMinus, HiPlus, HiPlusCircle, HiPlusSm } from 'react-icons/hi';
+import React from 'react';
+import { HiMinus, HiPlus } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { CellModel, CellType } from '../lib/models/cell';
-import { RootState, updateSize } from '../lib/store';
-import { indicesToAlphanumeric, numberToLetters } from '../lib/util';
+import { RootState, updateSize } from '../lib/client';
+import { CellModel, indicesToAlphanumeric, numberToLetters } from '../lib/core';
 import { defaultTransition } from '../styles/constants';
-import { CellInput, CellInputProps, Unit } from './CellInput';
-import { CellLabel, CellLabelProps } from './CellLabel';
+import { CellInput, CellInputProps } from './CellInput';
 
 interface Dimension {
     width: number;

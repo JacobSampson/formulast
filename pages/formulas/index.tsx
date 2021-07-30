@@ -2,19 +2,25 @@ import { Layout } from '../../layouts/Layout'
 import { Sheet } from '../../components/Sheet'
 import { Aside } from '../../components/Aside'
 import { HiStar } from 'react-icons/hi'
-import { IFormula } from '../../lib/models/formula'
-import { getAllFormulaIds, getFormulaData } from '../../lib/core/function-parser'
+import { IFormula } from '../../lib/core'
+import { getAllFormulaIds, getFormulaData } from '../../lib/server/services/function-parser'
 import { useEffect, useState } from 'react'
 import { GetStaticProps } from 'next'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { welcome } from '../../lib/core/language/site'
+import { ResourceService } from '../../lib/server'
 
 export interface FormulasPageProps {
   formulas: IFormula[];
+  communityFormulas?: IFormula[];
 }
 
-const Title = styled.h2`
+const Title = styled.h1`
+
+`;
+
+const Subtitle = styled.h2`
   font-weight: 380;
 `;
 
@@ -52,15 +58,29 @@ const Card = styled.a`
 `;
 
 const FormulasPage: React.FC<FormulasPageProps> = ({
-  formulas = []
+  formulas = [],
+  communityFormulas
 }) => {
   return (
     <Layout
       asides={<Aside title='How to Use' description={welcome}/>}>
+      {/* <Title>Explore Formulas</Title> */}
       <Cards>
-        <Title>Explore</Title>
+        <Subtitle>Explore</Subtitle>
         {formulas && formulas.length && formulas.map(formula => {
           const link = `/formulas/${formula.id}`;
+          const description = formula.meta.description;
+
+          return <Link href={link} key={link}>
+            <Card title={formula.meta.title}>
+              <h3>{formula.meta.title}</h3>
+              <p>{description}</p>
+            </Card>
+          </Link>
+        })}
+        <Subtitle>Community</Subtitle>
+        {communityFormulas && communityFormulas.length && communityFormulas.map(formula => {
+          const link = `/community/${formula.id}`;
           const description = formula.meta.description;
 
           return <Link href={link} key={link}>
@@ -78,9 +98,13 @@ const FormulasPage: React.FC<FormulasPageProps> = ({
 export const getStaticProps: GetStaticProps = async () => {
   const formulaIds = getAllFormulaIds();
   const formulas = await Promise.all(formulaIds.map(({ params: { id } }) => getFormulaData(id)));
+
+  const communityFormulas = await (new ResourceService()).fetchFormulas();
+
   return {
     props: {
-      formulas
+      formulas,
+      communityFormulas
     }
   };
 }

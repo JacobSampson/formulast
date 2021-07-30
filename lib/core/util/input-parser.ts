@@ -1,4 +1,4 @@
-import { Direction, InputType } from "../../components/CellInput";
+import { InputType } from "../../../components/CellInput";
 
 export const parseLabel = (label: string) => {
     if ((label.toString()).match(/\".*\"(u|d|r|l|)/)) {
@@ -7,7 +7,6 @@ export const parseLabel = (label: string) => {
         return label.slice(1);
     }
 
-    console.log(label)
     throw new Error('Incorrect label format');
 }
 

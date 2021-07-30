@@ -1,1 +1,61 @@
-{"cells":[[{"value":"\"Current Assets\"d","variant":"secondary","unit":"$"},{"value":"\"Current Liabilities\"d","variant":"secondary","unit":"$"}],[{"value":"100","tag":"A2"},{"value":"100","tag":"B2"}],[null,null],[{"value":"\"Current Ratio\"r","variant":"primary","unit":"%"},{"value":"=A2/B2*100","tag":"B4","disabled":true}],[{"value":"\"Current Ratio\"r","variant":"primary"},{"value":"=A2/B2","tag":"B5"}]],"meta":{"title":"Current Ratio","description":"Calculate a company's current ratio","tags":[{"label":"Accounting"}]}}
+{
+    "cells": [
+        [
+            {
+                "value": "\"Current Assets\"",
+                "variant": "secondary",
+                "unit": "$"
+            },
+            {
+                "value": "\"Current Liabilities\"",
+                "variant": "secondary",
+                "unit": "$"
+            }
+        ],
+        [
+            {
+                "value": "100",
+                "tag": "A2"
+            },
+            {
+                "value": "100",
+                "tag": "B2"
+            }
+        ],
+        [
+            null,
+            null
+        ],
+        [
+            {
+                "value": "\"Current Ratio\"",
+                "variant": "primary",
+                "unit": "%"
+            },
+            {
+                "value": "=A2/B2*100",
+                "tag": "B4",
+                "disabled": true
+            }
+        ],
+        [
+            {
+                "value": "\"Current Ratio\"",
+                "variant": "primary"
+            },
+            {
+                "value": "=A2/B2",
+                "tag": "B5"
+            }
+        ]
+    ],
+    "meta": {
+        "title": "Current Ratio",
+        "description": "Calculate a company's current ratio",
+        "tags": [
+            {
+                "label": "Accounting"
+            }
+        ]
+    }
+}

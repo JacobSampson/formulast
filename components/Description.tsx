@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
-import { HiOutlineEye, HiOutlineSave, HiOutlineStar, HiPencilAlt, HiStar } from 'react-icons/hi';
+import { HiOutlineEye, HiOutlineSave, HiPencilAlt } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { IAuthor } from '../lib/models/author';
-import { ITag } from '../lib/models/tag';
-import { saveFormula } from '../lib/services/formulas';
-import { RootState, setViewState, updateFormulaMeta, ViewMode } from '../lib/store';
+import { RootState, saveFormula, setViewState, updateFormulaMeta, ViewMode } from '../lib/client';
 import { Button } from './Button';
 import { FieldInput } from './FieldInput';
 import { Pill } from './Pill';
-import { CellModel } from '../lib/models';
-import { FormulaMeta } from '../lib/models/formula';
 import { EditBar } from './EditBar';
+import { CellModel, FormulaMeta, IAuthor, ITag } from '../lib/core';
 
 export interface DescriptionProps {
     title: string;

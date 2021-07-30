@@ -1,17 +1,12 @@
-import Head from 'next/head'
-import Date from '../../components/Date'
 import { GetStaticProps, GetStaticPaths } from 'next'
-import { getAllFormulaIds, getFormulaData } from '../../lib/core/function-parser'
-import { FormulaMeta, IFormula } from '../../lib/models/formula'
+import { getAllFormulaIds, getFormulaData } from '../../lib/server/services/function-parser'
 import { Layout } from '../../layouts/Layout'
 import { useDispatch } from 'react-redux'
-import { loadFormula } from '../../lib/store'
 import { Sheet } from '../../components/Sheet'
 import { Aside } from '../../components/Aside'
-import { HiStar } from 'react-icons/hi'
 import { explanation } from '../../lib/core/language/site'
-import { indicesToAlphanumeric } from '../../lib/util'
-import { ResourceService } from '../../lib/services/resource-service'
+import { IFormula } from '../../lib/core'
+import { loadFormula } from '../../lib/client/store'
 
 export interface FormulaPageProps {
   formula: IFormula;

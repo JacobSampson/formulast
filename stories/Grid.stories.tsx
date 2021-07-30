@@ -1,6 +1,5 @@
 import { Story } from '@storybook/react';
 import { Grid, GridProps } from '../components/Grid';
-import { CellModel, CellType } from '../lib/models/cell';
 import { testCells } from './data/test___cells';
 
 

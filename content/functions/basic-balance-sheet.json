@@ -1,1 +1,124 @@
-{"cells":[[{"value":"\"Cash\"r","variant":"secondary","direction":"right"},{"value":"100000","variant":"secondary"}],[{"value":"\"Accounts Receivable\"r","variant":"secondary","direction":"right"},{"value":"50000"}],[{"value":"\"Inventory\"r","variant":"secondary","direction":"right"},{"value":"100000"}],[{"value":"\"Equipment\"r","variant":"secondary","direction":"right"},{"value":"750000"}],[{"value":"\"Accumulated Depreciation\"r","direction":"right"},{"value":"30000"}],[{"value":"\"Total Assets\"r","variant":"primary","direction":"right"},{"value":"=B1+B2+B3+B4-B5","disabled":true}],[null,null],[{"value":"\"Accounts Payable\"r","variant":"secondary","direction":"right"},{"value":"800000"}],[{"value":"\"Total Liabilities\"r","variant":"primary","direction":"right"},{"value":"=B8","disabled":true}],[null,null],[{"value":"\"Retained Earnings\"r","variant":"secondary","direction":"right"},{"value":"170000"}],[{"value":"\"Liabilities and Equity\"r","variant":"primary","direction":"right"},{"value":"=B9+B11","disabled":true}]],"meta":{"title":"Basic Balance Sheet","description":"A basic balance sheet with broad asset and liability categories","tags":[{"label":"Accounting"}]}}
+{
+    "cells": [
+        [
+            {
+                "value": "\"Cash\"",
+                "variant": "secondary",
+                "direction": "right"
+            },
+            {
+                "value": "100000",
+                "variant": "secondary"
+            }
+        ],
+        [
+            {
+                "value": "\"Accounts Receivable\"",
+                "variant": "secondary",
+                "direction": "right"
+            },
+            {
+                "value": "50000"
+            }
+        ],
+        [
+            {
+                "value": "\"Inventory\"",
+                "variant": "secondary",
+                "direction": "right"
+            },
+            {
+                "value": "100000"
+            }
+        ],
+        [
+            {
+                "value": "\"Equipment\"",
+                "variant": "secondary",
+                "direction": "right"
+            },
+            {
+                "value": "750000"
+            }
+        ],
+        [
+            {
+                "value": "\"Accumulated Depreciation\"",
+                "direction": "right"
+            },
+            {
+                "value": "30000"
+            }
+        ],
+        [
+            {
+                "value": "\"Total Assets\"",
+                "variant": "primary",
+                "direction": "right"
+            },
+            {
+                "value": "=B1+B2+B3+B4-B5",
+                "disabled": true
+            }
+        ],
+        [
+            null,
+            null
+        ],
+        [
+            {
+                "value": "\"Accounts Payable\"",
+                "variant": "secondary",
+                "direction": "right"
+            },
+            {
+                "value": "800000"
+            }
+        ],
+        [
+            {
+                "value": "\"Total Liabilities\"",
+                "variant": "primary",
+                "direction": "right"
+            },
+            {
+                "value": "=B8",
+                "disabled": true
+            }
+        ],
+        [
+            null,
+            null
+        ],
+        [
+            {
+                "value": "\"Retained Earnings\"",
+                "variant": "secondary",
+                "direction": "right"
+            },
+            {
+                "value": "170000"
+            }
+        ],
+        [
+            {
+                "value": "\"Liabilities and Equity\"",
+                "variant": "primary",
+                "direction": "right"
+            },
+            {
+                "value": "=B9+B11",
+                "disabled": true
+            }
+        ]
+    ],
+    "meta": {
+        "title": "Basic Balance Sheet",
+        "description": "A basic balance sheet with broad asset and liability categories",
+        "tags": [
+            {
+                "label": "Accounting"
+            }
+        ]
+    }
+}

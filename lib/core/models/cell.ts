@@ -1,5 +1,4 @@
-import { CellInputProps, Direction, InputType, Unit, Variant } from "../../components/CellInput";
-import { CellLabelProps, Direction as CellLabelDirection } from "../../components/CellLabel";
+import { Direction, InputType, Unit, Variant } from "../../../components/CellInput";
 
 export enum CellType {
     LABEL = 'label',
@@ -7,7 +6,6 @@ export enum CellType {
     VALUE = 'value',
     EMPTY = 'empty'
 }
-
 
 export interface CellModel {
     unit?: Unit;
