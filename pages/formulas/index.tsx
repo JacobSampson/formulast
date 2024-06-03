@@ -21,7 +21,7 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.h2`
-  font-weight: 380;
+  font-weight: 380; 
 `;
 
 const Cards = styled.section`
@@ -44,10 +44,12 @@ const Card = styled.a`
   h3 {
     margin-top: 0.5em;
     font-weight: 380;
+    font-size: ${({ theme }) => theme.fontSize.medium};
   }
 
   p {
     font-weight: 150;
+    font-size: ${({ theme }) => theme.fontSize.medium};
   }
 
   &:hover {
@@ -78,7 +80,7 @@ const FormulasPage: React.FC<FormulasPageProps> = ({
             </Card>
           </Link>
         })}
-        <Subtitle>Community</Subtitle>
+        {/* <Subtitle>Community</Subtitle>
         {communityFormulas && communityFormulas.length && communityFormulas.map(formula => {
           const link = `/community/${formula.id}`;
           const description = formula.meta.description;
@@ -89,7 +91,7 @@ const FormulasPage: React.FC<FormulasPageProps> = ({
               <p>{description}</p>
             </Card>
           </Link>
-        })}
+        })} */}
       </Cards>
     </Layout>
   );
@@ -99,12 +101,12 @@ export const getStaticProps: GetStaticProps = async () => {
   const formulaIds = getAllFormulaIds();
   const formulas = await Promise.all(formulaIds.map(({ params: { id } }) => getFormulaData(id)));
 
-  const communityFormulas = await (new ResourceService()).fetchFormulas();
+  // const communityFormulas = await (new ResourceService()).fetchFormulas();
 
   return {
     props: {
       formulas,
-      communityFormulas
+      communityFormulas: [],
     }
   };
 }

@@ -57,5 +57,19 @@
                 "label": "Accounting"
             }
         ]
-    }
+    },
+    "links": [
+        {
+            "label": "Current Ratio",
+            "url": "current-ratio"
+        },
+        {
+            "label": "Quick Radio",
+            "url": "quick-ratio"
+        },
+        {
+            "label": "Basic Balance Sheet",
+            "url": "basic-balance-sheet"
+        }
+    ]
 }

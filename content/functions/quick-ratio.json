@@ -70,5 +70,19 @@
                 "label": "Accounting"
             }
         ]
-    }
+    },
+    "links": [
+        {
+            "label": "Current Ratio",
+            "url": "current-ratio"
+        },
+        {
+            "label": "Return on Equity",
+            "url": "return-on-equity"
+        },
+        {
+            "label": "Basic Balance Sheet",
+            "url": "basic-balance-sheet"
+        }
+    ]
 }

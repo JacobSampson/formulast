@@ -15,6 +15,7 @@ export interface DescriptionProps {
     description: string;
     author?: IAuthor;
     tags?: ITag[];
+    links?: { url: string, label?: string }[];
 }
 
 const Container = styled.header`
@@ -134,7 +135,7 @@ export const Description: React.FC<DescriptionProps> = ({
     }    
 
     const mode = useSelector((state: RootState) => state.view.mode);
-    const editable = mode === 'edit';
+    const editable = false;
     const { cells, meta } = useSelector((state: RootState) => state.grid);
 
     return (
@@ -155,7 +156,7 @@ export const Description: React.FC<DescriptionProps> = ({
                     })}
                     {tags && editable && <Tag><StyledPill add editable onAction={(newTag) => addTag(newTag)}/></Tag>}
                 </Tags>
-                <Buttons>
+                {editable && <Buttons>
                     <Button
                         variant={mode === 'edit' ? 'secondary' : 'primary'}
                         size='medium'
@@ -171,7 +172,7 @@ export const Description: React.FC<DescriptionProps> = ({
                         <> <HiOutlineSave /> Save </>
                     </Button>
                     {/* <Button size='medium' variant='primary'><HiOutlineStar /> 67</Button> */}
-                </Buttons>
+                </Buttons>}
             </Elements>
             <DescriptionBlock>
             <FieldInput

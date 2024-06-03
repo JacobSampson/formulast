@@ -1,7 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { Description, DescriptionProps } from '../components/Description';
-import { HiPencilAlt, HiOutlineStar } from 'react-icons/hi';
 
 export default {
   title: 'Atoms/Description',

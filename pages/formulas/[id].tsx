@@ -22,6 +22,7 @@ const FormulaPage: React.FC<FormulaPageProps> = ({
     <Layout
       asides={(<>
         <Aside title='How to Use' description={explanation}/>
+        {formula?.meta?.links?.length && <Aside title='Related' links={formula.meta.links}/>}
       </>)}>
       <Sheet />
     </Layout>

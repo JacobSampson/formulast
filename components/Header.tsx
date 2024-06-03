@@ -7,7 +7,7 @@ import styled from 'styled-components';
 export interface HeaderProps {}
 
 const Title = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize.large};
+  font-size: ${({ theme }) => theme.fontSize.medium};
   font-weight: 150;
   display: flex;
   flex-direction: row;
@@ -38,7 +38,7 @@ const Bar = styled.nav`
   align-items: center;
   justify-content: space-between;
   border-bottom: 0.5em solid ${({ theme }) => theme.palette.primary.main};
-  padding: 0 3em;
+  padding: 0 1em;
 
   @media screen and (max-width: ${({ theme }) => theme.screen.xsmall}) {
     display: flex;
@@ -80,7 +80,7 @@ const InteractiveLink = styled.a<{ active: boolean }>`
   text-decoration: none;
   color: ${({ theme }) => theme.palette.common.black};
   cursor: pointer;
-  font-size: ${({ theme }) => theme.fontSize.large};
+  font-size: ${({ theme }) => theme.fontSize.medium};
   font-weight: 100;
   margin: 0 1em;
   position: relative;
@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = () => {
             <StyledImage
               priority
               src='/images/logo.svg'
-              height={'100%'}
+              height={'80%'}
               width={'100%'}
               alt={'Formulast Logo'}
             />

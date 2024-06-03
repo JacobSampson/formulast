@@ -5,5 +5,5 @@ Enter a '=' into an empty cell to create a new formula. Reference other cells wi
 `;
 
 export const welcome = `
-Formulast lets users create and share clean, read-to-use function snippets. Select any formula to get started
+Formulast lets users find read-to-use function snippets. Select any formula to get started
 `;

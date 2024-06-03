@@ -51,11 +51,25 @@
     ],
     "meta": {
         "title": "Current Ratio",
-        "description": "Calculate a company's current ratio",
+        "description": "The current ratio is a liquidity ratio that measures whether a firm has enough resources to meet its short-term obligations. It compares a firm's current assets to its current liabilities",
         "tags": [
             {
                 "label": "Accounting"
             }
         ]
-    }
+    },
+    "links": [
+        {
+            "label": "Return on Equity",
+            "url": "return-on-equity"
+        },
+        {
+            "label": "Quick Radio",
+            "url": "quick-ratio"
+        },
+        {
+            "label": "Basic Balance Sheet",
+            "url": "basic-balance-sheet"
+        }
+    ]
 }
