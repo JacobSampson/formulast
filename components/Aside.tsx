@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { inDevEnvironment } from '../lib/client/constants';
+import { HiX } from 'react-icons/hi';
 
 export interface AsideProps {
     title: string;
     description?: string;
     links?: { url: string, label?: string }[],
+    onLinkAction?: (url: string) => void,
 }
 
 const Container = styled.div`
@@ -26,7 +29,7 @@ const Title = styled.h3`
     gap: 1em;
 `;
 
-const Description = styled.div<{ expanded: boolean }>`
+const Description = styled.div<{ expanded?: boolean }>`
     /* ${({ expanded }) => (!expanded) && `
         max-height: 3em;
         overflow: hidden;
@@ -69,7 +72,7 @@ const StyledLink = styled.a`
     transition: all 0.15s ease-in-out;
   }
 
-  &:hover {
+  &:hover * {
     opacity: 80%;
     text-decoration: none;
   }
@@ -81,27 +84,42 @@ const StyledLink = styled.a`
 `;
 
 
-export const Aside: React.FC<AsideProps> = ({
+export const Aside: React.FC<AsideProps & React.PropsWithChildren> = ({
     title,
     description,
     links,
+    onLinkAction,
     children,
     ...props
 }) => {
     const [expanded, setExpanded] = useState(false);
+
+    const expandable = useMemo(
+        () => links?.length > 5,
+        [links?.length],
+    );
 
     return <Container>
         <Title>
             {title}
             {children}
         </Title>
-        {description && <Description expanded={expanded}>
+        {description && <Description>
             {description}
         </Description>}
-        {links?.length && <Description expanded >
+        {links?.length && <Description>
             <span>
-                {links.map(({ url, label }) => (
+                {(expanded ? links :  links.slice(0, 5)).map(({ url, label }) => (
                     <p key={url}>
+                        {
+                            inDevEnvironment && (
+                                <button
+                                    onClick={() => onLinkAction(url)}
+                                >
+                                    <HiX />
+                                </button>
+                            )
+                        }
                         <StyledLink href={url} target="_blank">
                             {label ?? url}
                         </StyledLink>
@@ -109,7 +127,7 @@ export const Aside: React.FC<AsideProps> = ({
                 ))}
             </span>
         </Description>}
-        {/* {!expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Read more</Expander>}
-        {expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Close</Expander>} */}
+        {expandable && !expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>See more</Expander>}
+        {expanded && <Expander onClick={() => setExpanded(expanded => !expanded)}>Close</Expander>}
     </Container>
 };

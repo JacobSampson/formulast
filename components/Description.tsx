@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router'
 import { HiOutlineEye, HiOutlineSave, HiPencilAlt } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,9 @@ import { FieldInput } from './FieldInput';
 import { Pill } from './Pill';
 import { EditBar } from './EditBar';
 import { CellModel, FormulaMeta, IAuthor, ITag } from '../lib/core';
+import { inDevEnvironment } from '../lib/client/constants';
+import Link from 'next/link';
+import TeXToSVG from 'tex-to-svg';
 
 export interface DescriptionProps {
     title: string;
@@ -16,6 +19,8 @@ export interface DescriptionProps {
     author?: IAuthor;
     tags?: ITag[];
     links?: { url: string, label?: string }[];
+    src?: string;
+    text?: string;
 }
 
 const Container = styled.header`
@@ -94,14 +99,68 @@ const StyledPill = styled(Pill)`
     width: '3rem';
 `;
 
+const ExternalReference = styled(Link)`
+    text-decoration: none;
+    color: ${({ theme }) => theme.palette.primary.main};
+    cursor: pointer;
+    font-size: ${({ theme }) => theme.fontSize.small};
+    position: relative;
+
+    &:after {
+        content: '';
+        display: block;
+        width: 0%;
+        height: 0.05em;
+        background-color: ${({ theme }) => theme.palette.common.black};
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        transition: all 0.15s ease-in-out;
+    }
+
+    &:hover * {
+        opacity: 80%;
+        text-decoration: none;
+    }
+
+    &:hover:after {
+        opacity: 80%;
+        width: 100%;
+    }
+`;
+
+const TextBlock: React.FC<{ text: string }> = ({ text, ...props }) => {
+    const src = useMemo(
+        () => {
+            const svg = TeXToSVG(text)
+            return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+        },
+        [text],
+    );
+
+    return (
+        <div {...props}>
+            <img src={src} />
+        </div>
+    );
+}
+
+const StyledTextBlock = styled(TextBlock)`
+    padding: 2rem 0 1rem 0;
+`;
+
 export const Description: React.FC<DescriptionProps> = ({
     title,
     description,
     author,
-    tags
+    tags,
+    src,
+    text,
 }) => {
     const dispatch = useDispatch();
     const router = useRouter();
+
+    console.log('text', text, src)
 
     const setMode = (mode: ViewMode) => dispatch(setViewState({ mode }));
     const updateMeta = (update: any) => dispatch(updateFormulaMeta({
@@ -132,10 +191,10 @@ export const Description: React.FC<DescriptionProps> = ({
         saveFormula(cells, meta).then(response => {
             if (response?.redirect?.destination) router.push(response.redirect.destination);
         });
-    }    
+    }
 
     const mode = useSelector((state: RootState) => state.view.mode);
-    const editable = false;
+    const editable = inDevEnvironment;
     const { cells, meta } = useSelector((state: RootState) => state.grid);
 
     return (
@@ -147,14 +206,15 @@ export const Description: React.FC<DescriptionProps> = ({
                     onChange={event => updateMeta({ title: event.target.value })}></FieldInput>
             </Title>
             {author && <Author>Created by {author.username}</Author>}
+            {src && <ExternalReference href={src}>See {src}</ExternalReference>}
             <Elements>
                 <Tags>
                     {tags && tags.map(({ label }) => {
                         return <Tag key={label}>
-                            <Pill value={label} editable={editable} onAction={() => removeTag(label)}/>
+                            <Pill value={label} editable={editable} onAction={() => removeTag(label)} />
                         </Tag>
                     })}
-                    {tags && editable && <Tag><StyledPill add editable onAction={(newTag) => addTag(newTag)}/></Tag>}
+                    {tags && editable && <Tag><StyledPill add editable onAction={(newTag) => addTag(newTag)} /></Tag>}
                 </Tags>
                 {editable && <Buttons>
                     <Button
@@ -174,13 +234,14 @@ export const Description: React.FC<DescriptionProps> = ({
                     {/* <Button size='medium' variant='primary'><HiOutlineStar /> 67</Button> */}
                 </Buttons>}
             </Elements>
+            {meta?.text && <StyledTextBlock text={text} />}
             <DescriptionBlock>
-            <FieldInput
-                value={description}
-                area
-                editable={mode === 'edit'}
-                onChange={event => updateMeta({ description: event.target.value })}
-            />
+                <FieldInput
+                    value={description}
+                    area
+                    editable={mode === 'edit'}
+                    onChange={event => updateMeta({ description: event.target.value })}
+                />
             </DescriptionBlock>
             {mode === 'edit' && <StyledEditBar />}
         </Container>

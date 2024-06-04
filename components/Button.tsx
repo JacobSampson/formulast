@@ -67,7 +67,7 @@ const Label = styled.p`
   gap: 0.5em;
 `;
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps & React.PropsWithChildren> = ({
   variant = 'secondary',
   size = 'medium',
   active = true,

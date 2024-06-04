@@ -52,7 +52,7 @@ const Container = styled.body`
 const name = 'Jacob Sampson'
 export const siteTitle = 'formulast'
 
-export const Layout: React.FC<LayoutProps> = ({
+export const Layout: React.FC<LayoutProps & React.PropsWithChildren> = ({
   asides,
   children
 }) => {  

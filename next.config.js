@@ -1,11 +1,16 @@
 module.exports = {
-    async redirects() {
-        return [
-            {
-                source: '/',
-                destination: '/formulas',
-                permanent: true,
-            },
-        ]
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/formulas',
+        permanent: true,
+      },
+    ];
+  },
+  compiler: {
+    styledComponents: {
+      ssr: true,
     },
-}
+  },
+};

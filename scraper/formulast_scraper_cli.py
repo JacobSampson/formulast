@@ -1,8 +1,5 @@
 import argparse
-import os
-import sys
 import logging
-from typing import List
 
 from src.scrapers import WikipediaScraper
 
@@ -43,7 +40,6 @@ class FormulastScraperCli:
         ).run(
             tags=args.tags.split(",") if args.tags else None,
         )
-
 
 
 if __name__ == "__main__":

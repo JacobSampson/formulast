@@ -66,17 +66,19 @@ const Container = styled.header`
 const StyledImage = styled(Image)`
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   text-decoration: none;
+  text-decoration-color: transparent;
   color: ${({ theme }) => theme.palette.common.black};
   cursor: pointer;
 
   &:hover {
     text-decoration: none;
+    text-decoration-color: transparent;
   }
 `;
 
-const InteractiveLink = styled.a<{ active: boolean }>`
+const InteractiveLink = styled.a`
   text-decoration: none;
   color: ${({ theme }) => theme.palette.common.black};
   cursor: pointer;
@@ -107,7 +109,7 @@ const InteractiveLink = styled.a<{ active: boolean }>`
     width: 100%;
   }
 
-  ${({ active }) => active && `
+  ${(props) => props.$active && `
       &:after { width: 100% }
   `}
 `;
@@ -117,25 +119,21 @@ export const Header: React.FC<HeaderProps> = () => {
 
   return (<Container>
     <Bar>
-      <Link href='/formulas'>
-        <StyledLink>
-          <Title>
-            <StyledImage
-              priority
-              src='/images/logo.svg'
-              height={'80%'}
-              width={'100%'}
-              alt={'Formulast Logo'}
-            />
-            FORMULAST
-          </Title>
+      <StyledLink href='/formulas'>
+        <Title>
+          <StyledImage
+            priority
+            src='/images/logo.svg'
+            height={48}
+            width={48}
+            alt={'Formulast Logo'}
+          />
+          FORMULAST
+        </Title>
         </StyledLink>
-      </Link>
 
       <Buttons>
-        <Link href='/formulas'>
-          <InteractiveLink active={router.pathname === '/formulas'}>explore</InteractiveLink>
-        </Link>
+        <InteractiveLink $active={router.pathname === '/formulas'} href='/formulas'>explore</InteractiveLink>
       </Buttons>
     </Bar>
   </Container>)

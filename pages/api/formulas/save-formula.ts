@@ -8,6 +8,10 @@ interface SaveFormulaRequest {
 }
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
+  if (process.env.NODE_ENV !== 'development') {
+    throw new Error("Unauthorized")
+  }
+
   const { cells, meta }: SaveFormulaRequest = request.body;
 
   const parsedFormula = {

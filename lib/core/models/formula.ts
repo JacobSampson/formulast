@@ -8,4 +8,5 @@ export interface IFormula {
     meta: FormulaMeta;
     cells: CellModel[][];
     id?: string;
+    src?: string;
 }

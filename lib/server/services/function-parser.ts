@@ -42,5 +42,6 @@ export async function getFormulaData(id: string): Promise<IFormula> {
   return {
     id,
     ...functionData,
+    cells: functionData.cells ?? [[null]],
   };
 }

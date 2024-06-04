@@ -59,6 +59,26 @@ const Card = styled.a`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  text-decoration-color: transparent;
+  color: ${({ theme }) => theme.palette.common.black};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    text-decoration-color: transparent;
+  }
+`;
+
+const Description = styled.p`
+  margin: 0;
+  height: fit-content;
+  max-height: 4.5rem;
+  text-overflow: ellipsis;
+  overflow-y: hidden;
+`;
+
 const FormulasPage: React.FC<FormulasPageProps> = ({
   formulas = [],
   communityFormulas
@@ -73,12 +93,12 @@ const FormulasPage: React.FC<FormulasPageProps> = ({
           const link = `/formulas/${formula.id}`;
           const description = formula.meta.description;
 
-          return <Link href={link} key={link}>
+          return <StyledLink href={link} key={link}>
             <Card title={formula.meta.title}>
               <h3>{formula.meta.title}</h3>
-              <p>{description}</p>
+              <Description>{description}</Description>
             </Card>
-          </Link>
+          </StyledLink>
         })}
         {/* <Subtitle>Community</Subtitle>
         {communityFormulas && communityFormulas.length && communityFormulas.map(formula => {

@@ -6,7 +6,8 @@ import { Sheet } from '../../components/Sheet'
 import { Aside } from '../../components/Aside'
 import { explanation } from '../../lib/core/language/site'
 import { IFormula } from '../../lib/core'
-import { loadFormula } from '../../lib/client/store'
+import { loadFormula, removeLink } from '../../lib/client/store'
+import { useCallback } from 'react'
 
 export interface FormulaPageProps {
   formula: IFormula;
@@ -18,11 +19,16 @@ const FormulaPage: React.FC<FormulaPageProps> = ({
   const dispatch = useDispatch();
   dispatch(loadFormula({ cells: formula.cells, meta: formula.meta }));
 
+  const onLinkAction = useCallback(
+    (url) => dispatch(removeLink(url)),
+    [dispatch],
+  );
+
   return (
     <Layout
       asides={(<>
+        {formula?.meta?.links?.length && <Aside title='Related' links={formula.meta.links} onLinkAction={onLinkAction}/>}
         <Aside title='How to Use' description={explanation}/>
-        {formula?.meta?.links?.length && <Aside title='Related' links={formula.meta.links}/>}
       </>)}>
       <Sheet />
     </Layout>

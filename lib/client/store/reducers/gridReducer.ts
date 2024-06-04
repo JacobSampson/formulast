@@ -136,7 +136,9 @@ const grid = createSlice({
                 unit: string,
                 variant: Variant & '',
                 disabled: boolean,
-                direction?: Direction
+                direction?: Direction,
+                text?: string,
+                src?: string,
             }>
         ) {
             const cells = deepCopy(state.cells);
@@ -183,6 +185,22 @@ const grid = createSlice({
                 ...state,
                 cells
             };
+        },
+        removeLink(
+            state,
+            { payload }: PayloadAction<string>
+        ) {
+            const links = [...state.meta.links].filter(
+                (l) => l.url !== payload
+            );
+            console.log('removeLink', payload, state.meta.links, links)
+            return {
+                ...state,
+                meta: {
+                    ...state.meta,
+                    links,
+                }
+            }
         }
     }
 });
@@ -194,6 +212,7 @@ export const {
     updateSize,
     deleteCell,
     updateFormulaMeta,
-    updateCellMeta
+    updateCellMeta,
+    removeLink
 } = grid.actions;
 export default grid.reducer;

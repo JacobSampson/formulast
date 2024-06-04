@@ -22,19 +22,20 @@ class Tag:
 @dataclass
 class Formula:
     id: str
-    text: str
 
     @dataclass
     class Meta:
         title: str
+        text: Optional[str] = None
         links: Optional[List[Link]] = None
         description: Optional[str] = None
         tags: Optional[Tag] = field(
             default_factory=lambda: [],
         )
+        src: Optional[str] = None
 
     meta: Meta
-    src: Optional[str] = None
+
 
 class RecordWriter:
     def write(self, id: str, data: dict) -> None:
@@ -46,7 +47,6 @@ class LocalRecordWriter(RecordWriter):
 
     def __init__(self, output_dir: str = "output"):
         self.__output_dir = output_dir
-
 
     def write(self, id: str, data: dict) -> None:
         with open(
@@ -68,7 +68,6 @@ class WikipediaScraper:
     ) -> None:
         self.__starting_url = starting_url
         self.__record_writer = record_writer
-
 
     def run(self, tags: Optional[List[str]] = None) -> None:
         urls = [self.__starting_url]
@@ -106,21 +105,21 @@ class WikipediaScraper:
 
                 for formula in formulas:
                     formula = Formula(
-                        src=url,
-                        text=formula.text,
                         id=formula.id,
                         meta=Formula.Meta(
                             title=formula.meta.title,
+                            text=formula.meta.text,
                             description=description,
                             links=internal_links,
                             tags=[Tag(label=tag) for tag in (tags or [])],
+                            src=url,
                         ),
                     )
                     self.__record_writer.write(
                         formula.id,
                         asdict(formula),
                     )
-                
+
                 for link in links:
                     if link.url in visited_pages:
                         continue
@@ -129,14 +128,12 @@ class WikipediaScraper:
 
                 visited_pages.add(url)
 
-
     def __get_url_contents(self, url: str) -> Optional[str]:
         response = requests.get(url)
         if response.status_code != 200:
             return None
-        
-        return response.content
 
+        return response.content
 
     def __parse_formula_text(self, text: str) -> Tuple[str, str]:
         title = re.sub(
@@ -145,8 +142,8 @@ class WikipediaScraper:
             re.sub(
                 r"[^\w\s]",
                 "",
-                text.split("=")[0].split('{')[-1],
-            ).rstrip(" ")
+                text.split("=")[0].split("{")[-1],
+            ).rstrip(" "),
         )
         id = re.sub(
             r"[^\w]",
@@ -161,7 +158,6 @@ class WikipediaScraper:
 
         return [id, title]
 
-
     def __get_formulas(self, tree) -> List[Formula]:
         formulas = []
 
@@ -169,7 +165,7 @@ class WikipediaScraper:
             '//img[contains(@alt, "displaystyle")]',
         ):
             try:
-                text = text.attrib['alt']
+                text = text.attrib["alt"]
                 [id, title] = self.__parse_formula_text(text)
                 formulas.append([id, title, text])
             except Exception:
@@ -187,9 +183,8 @@ class WikipediaScraper:
 
         return [
             Formula(
-                text=text,
                 id=id,
-                meta=Formula.Meta(title=title),
+                meta=Formula.Meta(title=title, text=text),
             )
             for [id, title, text] in formulas
         ]
@@ -203,10 +198,12 @@ class WikipediaScraper:
 
             if response.status_code != 200:
                 return None
-            
+
             return list(
-                response.json()["query"]['pages'].values(),
-            )[0]["extract"]
+                response.json()["query"]["pages"].values(),
+            )[
+                0
+            ]["extract"]
         except Exception:
             return None
 
@@ -215,7 +212,7 @@ class WikipediaScraper:
         for url in tree.xpath(
             '//h2[./*[contains(text(),"See also")]]/following-sibling::ul[1]/*/a',
         ):
-            url = url.attrib['href']
+            url = url.attrib["href"]
             try:
                 links.append(
                     Link(
